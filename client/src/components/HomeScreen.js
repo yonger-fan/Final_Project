@@ -7,6 +7,11 @@ import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
 import Box from '@mui/material/Box'
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
+import Typography from '@mui/material/Typography';
+import { Button } from '@mui/material';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -36,36 +41,55 @@ const HomeScreen = () => {
                 ))
                 
             }
-            <Fab sx={{transform:"translate(1150%, 10%)"}}
-                color="primary" 
-                aria-label="add"
-                id="add-list-button"
-                onClick={handleCreateNewList}
-            >
-                <AddIcon />
-            </Fab>
+            
             </List>;
     }
     return (
-        <div id="playlist-selector">
-            <div id="list-selector-heading">
-            <Fab sx={{transform:"translate(-20%, 0%)"}}
+    <div>
+        <div id = "leftHome-layout">
+        <Button sx={{transform:"translate(10%, 30%)"}}
                 color="primary" 
-                aria-label="add"
-                id="add-list-button"
                 onClick={handleCreateNewList}
             >
-                <AddIcon />
-            </Fab>
-                Your Playlists
-            </div>
+                <HomeOutlinedIcon />
+        </Button>
+        <Button sx={{transform:"translate(10%, 30%)"}}
+                color="primary" 
+                onClick={handleCreateNewList}
+            >
+                <GroupsOutlinedIcon />
+        </Button>
+        <Button sx={{transform:"translate(10%, 30%)"}}
+                color="primary" 
+                onClick={handleCreateNewList}
+            >
+                <PersonOutlineOutlinedIcon />
+        </Button>
             <Box sx={{bgcolor:"background.paper"}} id="list-selector-list">
                 {
                     listCard
                 }
                 <MUIDeleteModal />
             </Box>
-        </div>)
+        </div>
+        <div id = "rightHome-layout">
+             <Box sx={{bgcolor:"background.paper"}} id="list-selector-list">
+                    {
+                        listCard
+                    }
+                    <MUIDeleteModal />
+              </Box>
+        </div>
+        <div id = "add-list-position">
+            <input
+                type = "button"
+                id = "add-list"
+                onClick = {handleCreateNewList}
+                value="+" />
+            Your lists
+        </div>
+    </div>
+        )
 }
 
 export default HomeScreen;

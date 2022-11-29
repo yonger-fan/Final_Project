@@ -28,6 +28,7 @@ body {
   left: 10%;
   height: 90%;
   top: 5%;
+  display:grid;
 }
 
 #app-root {
@@ -36,6 +37,30 @@ body {
   height: 100%;
   top: 0%;
   left: 0%;
+}
+
+#rightHome-layout {
+    background-color: var(--swatch-primary);
+    /*background-color: #d6c4d8;*/
+    font-family: "Lexend Exa";
+    position: absolute;
+    width: 45%;
+    right: 0%;
+    height: 80%;
+    top: 13%;
+    overflow: scroll;
+}
+
+#leftHome-layout {
+  background-color: var(--swatch-primary);
+  /*background-color: #d6c4d8;*/
+  font-family: "Lexend Exa";
+  position: absolute;
+  width: 55%;
+  left: 0%;
+  height: 80%;
+  top: 13%;
+  overflow: scroll;
 }
 
 #playlister-banner {
@@ -146,6 +171,23 @@ body {
   background-color: var(--swatch-accent);
   max-height: 100px;
   overflow: scroll;
+}
+
+#add-list {
+  align-items: center;
+  font-size: 28pt;
+  border-radius: 4px;
+  border-color: var(--swatch-primary);
+}
+
+#add-list-position {
+  position: absolute;
+  left:45%;
+  top: 93%;
+  width: 100%;
+  height: 7%;
+  align-items: center;
+  font-size: 28pt;
 }
 
 #playlister-statusbar {
