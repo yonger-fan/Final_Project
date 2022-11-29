@@ -57,7 +57,7 @@ body {
   background-image: url("https://www.gifcen.com/wp-content/uploads/2022/03/rickroll-gif-7.gif");
   background-size: cover;
   color: rgb(0, 0, 0);
-  font-size: 10vw;
+  font-size: 48px;
   border-color: black;
   border-width: 5px;
   border-style: solid;
@@ -68,6 +68,38 @@ body {
   text-align: center;
   vertical-align: center;
 }
+
+.logo {
+  font-size: 20px;
+  text-align: left
+}
+
+.auther{
+  position: absolute;
+  height: 10%;
+  font-size: 20px;
+  text-align: left;
+  display: flex;
+  left: 10%;
+  top: 90%;
+  width: 100%;
+}
+
+.splashScreen-buttom{
+  font-size: 20px;
+  text-align: right;
+}
+
+.star-ratings {
+  unicode-bidi: bidi-override;
+  color: #f5cf44;
+  font-size: 25px;
+  height: 25px;
+  width: 100px;
+  margin: 0 auto;
+  position: relative;
+  text-shadow: 0 1px 0 #a2a2a2;
+} 
 
 #edit-toolbar {
   background-color: transparent;
