@@ -33,6 +33,13 @@ function ListCard(props) {
         store.addNewSong();
     }
 
+    function handleUndo() {
+        store.undo();
+    }
+    function handleRedo() {
+        store.redo();
+    }
+
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
         if (!event.target.disabled) {
@@ -145,6 +152,7 @@ function ListCard(props) {
             
 
         </ListItem>
+
         <Collapse in = {open} timeout = "auto" unmountOnExit>
             <div class = "expanded">
                 <div class = "expanded-grid" >
@@ -152,7 +160,7 @@ function ListCard(props) {
                 </div>  
 
                 <Box
-                 sx= {{ bgcolor: "#d6c4d8", height: "10%", borderRadius: "25px"}}
+                 sx= {{ bgcolor: "#d6c4d8", height: "10%", borderRadius: "25px",  width: "95%", transform: "translate(2.5%, 0%)"}}
                  >
                     <IconButton 
                     sx = {{p: 1, transform: "translate(650%, 0%)"}} 
@@ -161,11 +169,43 @@ function ListCard(props) {
                     }}
                     ><AddIcon/></IconButton>
                 </Box>
-        
+                <Box sx = {{transform: "translate(2.5%, 70%)"}}>
+                <input
+                disabled={!store.canUndo()}
+                type = "button"
+                id = "edit-toolBar-button"
+                value="Undo"
+                onClick={handleUndo}/>
+
+                <input
+                disabled={!store.canRedo()}
+                type = "button"
+                id = "edit-toolBar-button"
+                value="Redo"
+                onClick={handleRedo} />
+                </Box>
+
+                <Box sx = {{transform: "translate(55%, -30%)"}}>
+                <input
+                type = "button"
+                id = "edit-toolBar-button"
+                value="Publish" />
+
+                <input
+                type = "button"
+                id = "edit-toolBar-button"
+                value="Delete" 
+                onClick={handleDeleteList(idNamePair._id)}/>
+
+                <input
+                type = "button"
+                id = "edit-toolBar-button"
+                value="Duplicate" />
+                </Box>       
             
             </div>
         </Collapse>
-
+        
         </div>
 
     if (editActive) {

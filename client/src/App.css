@@ -133,6 +133,7 @@ body {
   transform: translate(41%, 0%);
 }
 
+
 .playlister-button,
 .playlister-button-disabled {
   font-size: 36pt;
@@ -186,6 +187,11 @@ body {
   font-size: 18px;
   border-radius: 4px;
   border-color: var(--swatch-primary);
+}
+
+#edit-toolBar-button {
+  font-size: 18px;
+  border-radius: 10px;
 }
 
 #add-list-position {
