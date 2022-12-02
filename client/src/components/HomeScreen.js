@@ -10,6 +10,7 @@ import Box from '@mui/material/Box'
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
+import SortOutlinedIcon from '@mui/icons-material/SortOutlined'
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
 /*
@@ -65,6 +66,9 @@ const HomeScreen = () => {
             >
                 <PersonOutlineOutlinedIcon />
         </Button>
+        <Box sx={{transform:"translate(50%, -60%)"}} >
+        <input type="text" placeholder="Search.." ></input>
+        </Box>
             <Box sx={{bgcolor:"background.paper"}} id="list-selector-list">
                 {
                     listCard
@@ -73,12 +77,31 @@ const HomeScreen = () => {
             </Box>
         </div>
         <div id = "rightHome-layout">
-             <Box sx={{bgcolor:"background.paper"}} id="list-selector-list">
-                    {
-                        listCard
-                    }
-                    <MUIDeleteModal />
-              </Box>
+        <div class = "splashScreen-buttom">
+        <Box sx={{transform:"translate(0%, 30%)"}} >
+            Sort By
+            <Button 
+                color="primary"
+                onClick={handleCreateNewList}
+            >
+                <SortOutlinedIcon />
+                </Button>
+            </Box>
+
+        </div>
+
+        <input
+                type = "button"
+                id = "player-button"
+                value="player" />
+
+        <input
+                type = "button"
+                id = "player-button"
+                onClick = {handleCreateNewList}
+                value="comment" />
+
+
         </div>
         <div id = "add-list-position">
             <input
@@ -86,7 +109,7 @@ const HomeScreen = () => {
                 id = "add-list"
                 onClick = {handleCreateNewList}
                 value="+" />
-            Your lists
+            Your Lists
         </div>
     </div>
         )

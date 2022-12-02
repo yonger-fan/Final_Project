@@ -115,6 +115,8 @@ body {
   text-align: right;
 }
 
+
+
 .star-ratings {
   unicode-bidi: bidi-override;
   color: #f5cf44;
@@ -176,6 +178,12 @@ body {
 #add-list {
   align-items: center;
   font-size: 28pt;
+  border-radius: 4px;
+  border-color: var(--swatch-primary);
+}
+
+#player-button {
+  font-size: 18px;
   border-radius: 4px;
   border-color: var(--swatch-primary);
 }
@@ -433,6 +441,43 @@ input {
   font-size: 24pt;
 }
 
+.expanded {
+  height: 400px;
+  animation: expand 0.5s ease;
+  background-color: #669966;
+  width: 575px;
+}
+
+.expanded-grid {
+  height: 70%;
+  top:0%;
+  overflow: scroll;
+}
+
+.unexpanded {
+  height: 90px;
+}
+
+.add-song-position {
+  position: absolute;
+  height: 15%;
+  align-items: center;
+  font-size: 18pt;
+  width:100%;
+  background-color: #d6c4d8;
+}
+
+.playlist-card{
+  margin: 10px;
+  padding: 20px;
+  border-radius: 25px;
+  width: 520px;
+  height: 70px;
+  background-color: #8000F00F;
+  font-size: 20pt;
+  cursor: pointer;
+}
+
 #close-modal-button {
   float: right;
 }
@@ -535,4 +580,23 @@ input {
   100% {
     transform: rotate(0deg);
   }
+}
+
+@keyframes expand {
+  0% {
+    height: 20px;
+  }
+  100% {
+    height: 40px;
+  }
+}
+
+@keyframes unexpand {
+  0% {
+    height: 30px;
+  }
+  100% {
+    height: 20px;
+  }
+  
 }
