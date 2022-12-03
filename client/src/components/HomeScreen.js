@@ -1,8 +1,9 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
-
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
@@ -13,6 +14,7 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import SortOutlinedIcon from '@mui/icons-material/SortOutlined'
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
+import YouTubePlayerExample from './player';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -20,6 +22,8 @@ import { Button } from '@mui/material';
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const isMenuOpen = Boolean(anchorEl);
 
     useEffect(() => {
         store.loadIdNamePairs();
@@ -28,6 +32,20 @@ const HomeScreen = () => {
     function handleCreateNewList() {
         store.createNewList();
     }
+
+    function handlePlayer() {
+        store.createNewList();
+    }
+
+    const handleProfileMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+    const menuId = 'primary-search-account-menu';
+
     let listCard = "";
     if (store) {
         listCard = 
@@ -45,6 +63,32 @@ const HomeScreen = () => {
             
             </List>;
     }
+
+    const sortByMenu = (
+        <Menu
+            anchorEl={anchorEl}
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            id={menuId}
+            keepMounted
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            open={isMenuOpen}
+            onClose={handleMenuClose}
+        >
+            <MenuItem onClick={handleMenuClose}>Name(A-Z)</MenuItem>
+            <MenuItem onClick={handleMenuClose}>Publish Date(Newest)</MenuItem>
+            <MenuItem onClick={handleMenuClose}>Listens(High - Low)</MenuItem>
+            <MenuItem onClick={handleMenuClose}>Likes(High - Low)</MenuItem>
+            <MenuItem onClick={handleMenuClose}>Dislikes(High - Low)</MenuItem>
+        </Menu>
+    )
+    let menu = sortByMenu;
+
     return (
     <div>
         <div id = "leftHome-layout">
@@ -78,21 +122,24 @@ const HomeScreen = () => {
         </div>
         <div id = "rightHome-layout">
         <div class = "splashScreen-buttom">
+
+
         <Box sx={{transform:"translate(0%, 30%)"}} >
             Sort By
             <Button 
                 color="primary"
-                onClick={handleCreateNewList}
+                onClick={handleProfileMenuOpen}
             >
                 <SortOutlinedIcon />
                 </Button>
+                {sortByMenu}
             </Box>
-
         </div>
 
         <input
                 type = "button"
                 id = "player-button"
+                onClick = {handlePlayer}
                 value="player" />
 
         <input
@@ -101,7 +148,9 @@ const HomeScreen = () => {
                 onClick = {handleCreateNewList}
                 value="comment" />
 
+                <YouTubePlayerExample/>
 
+        
         </div>
         <div id = "add-list-position">
             <input

@@ -23,6 +23,7 @@ function WorkspaceScreen() {
     else if (store.isRemoveSongModalOpen()) {
         modalJSX = <MUIRemoveSongModal />;
     }
+
     return (
         <Box>
         <List 

@@ -1,25 +1,46 @@
 import React from 'react';
 import YouTube from 'react-youtube';
+import GlobalStoreContext from '../store';
+import { useContext, useState } from 'react'
+import FastForwardIcon from '@mui/icons-material/FastForward';
+import FastRewindIcon from '@mui/icons-material/FastRewind';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
+import { IconButton } from '@mui/material';
+import { Box } from '@mui/material';
 
 export default function YouTubePlayerExample() {
+    const { store } = useContext(GlobalStoreContext);
+    const playlistName = "";
+    const title = "";
+    const artist = "";
     // THIS EXAMPLE DEMONSTRATES HOW TO DYNAMICALLY MAKE A
     // YOUTUBE PLAYER AND EMBED IT IN YOUR SITE. IT ALSO
     // DEMONSTRATES HOW TO IMPLEMENT A PLAYLIST THAT MOVES
     // FROM ONE SONG TO THE NEXT
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
-    let playlist = [
-        "mqmxkGjow1A",
-        "8RbXIMZmVv8",
-        "8UbNbor3OqQ"
-    ];
+    let size = 0;
+         let playlist = [];
+         let name = [];
+         let art = [];
+        if (store.currentList != null) {
+            size = store.currentList.songs.length;
+
+        }
+
+        for(let i = 0 ; i < size ; i++){
+            playlist[i] = 
+            store.currentList.songs[i].youTubeId;
+        }
+
 
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
     let currentSong = 0;
 
     const playerOptions = {
-        height: '390',
-        width: '640',
+        height: '350',
+        width: '470',
         playerVars: {
             // https://developers.google.com/youtube/player_parameters
             autoplay: 0,
@@ -30,6 +51,8 @@ export default function YouTubePlayerExample() {
     // THE PLAYER AND PLAYS IT
     function loadAndPlayCurrentSong(player) {
         let song = playlist[currentSong];
+        console.log("song " + song);
+        
         player.loadVideoById(song);
         player.playVideo();
     }
@@ -75,9 +98,28 @@ export default function YouTubePlayerExample() {
         }
     }
 
-    return <YouTube
+    return <div>
+        <YouTube
         videoId={playlist[currentSong]}
         opts={playerOptions}
         onReady={onPlayerReady}
-        onStateChange={onPlayerStateChange} />;
+        onStateChange={onPlayerStateChange} 
+        />
+
+            Playlist: {playlistName}
+            <br></br>
+            Song #: {currentSong}
+            <br></br>
+            Title: {title}
+            <br></br>
+            Artist: {artist}
+            <br></br>
+            <Box sx= {{bgcolor: "darkgray", borderRadius: "25px", width : "35%", transform: "translate(100%, 0%)"}}>
+            <IconButton><FastRewindIcon/></IconButton>
+            <IconButton><StopIcon/></IconButton>
+            <IconButton><PlayArrowIcon/></IconButton>
+            <IconButton><FastForwardIcon/></IconButton>
+            </Box>
+        </div>
+
 }

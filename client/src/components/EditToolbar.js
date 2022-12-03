@@ -2,9 +2,6 @@ import { useContext } from 'react'
 import { GlobalStoreContext } from '../store'
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-import RedoIcon from '@mui/icons-material/Redo';
-import UndoIcon from '@mui/icons-material/Undo';
-import CloseIcon from '@mui/icons-material/HighlightOff';
 
 /*
     This toolbar is a functional React component that
@@ -27,6 +24,7 @@ function EditToolbar() {
     function handleClose() {
         store.closeCurrentList();
     }
+
     return (
         <div id="edit-toolbar">
             <Button
@@ -41,21 +39,31 @@ function EditToolbar() {
                 id='undo-button'
                 onClick={handleUndo}
                 variant="contained">
-                    <UndoIcon />
+                    Undo
             </Button>
             <Button 
                 disabled={!store.canRedo()}
                 id='redo-button'
                 onClick={handleRedo}
                 variant="contained">
-                    <RedoIcon />
+                    Redo
             </Button>
+            
+
             <Button 
                 disabled={!store.canClose()}
                 id='close-button'
                 onClick={handleClose}
                 variant="contained">
-                    <CloseIcon />
+                    Publish
+            </Button>
+
+            <Button 
+                disabled={!store.canClose()}
+                id='close-button'
+                onClick={handleClose}
+                variant="contained">
+                   Duplicate
             </Button>
         </div>
     )

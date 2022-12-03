@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState} from 'react'
 import { GlobalStoreContext } from '../store'
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -13,7 +13,10 @@ import KeyboardDoubleArrowUpOutlinedIcon from '@mui/icons-material/KeyboardDoubl
 import { Collapse } from '@mui/material';
 import WorkspaceScreen from './WorkspaceScreen';
 import AddIcon from '@mui/icons-material/Add';
-import Button from '@mui/material';
+import Button from '@mui/material/Button';
+import AuthContext from '../auth';
+import EditToolbar from './EditToolbar';
+import YouTubePlayerExample from './player';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -24,20 +27,14 @@ import Button from '@mui/material';
 */
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [open, setOpen] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
 
-    function handleAddNewSong() {
-        store.addNewSong();
-    }
-
-    function handleUndo() {
-        store.undo();
-    }
-    function handleRedo() {
-        store.redo();
+    function handleClose() {
+        store.closeCurrentList();
     }
 
     function handleLoadList(event, id) {
@@ -51,6 +48,7 @@ function ListCard(props) {
 
             // CHANGE THE CURRENT LIST
             store.setCurrentList(id);
+        
         }
     }
 
@@ -85,19 +83,12 @@ function ListCard(props) {
         setText(event.target.value);
     }
 
-    function handleArrowIcon(event,id){
-        console.log("handleLoadList for " + id);
-        if (!event.target.disabled) {
-            let _id = event.target.id;
-            if (_id.indexOf('list-card-text-') >= 0)
-                _id = ("" + _id).substring("list-card-text-".length);
+    function handleToogleopen(event){
+        if (store.currentList != null){setOpen(!open);}
+    }
 
-            console.log("load " + event.target.id);
-
-            // CHANGE THE CURRENT LIST
-            store.setCurrentList(id);
-            setOpen(!open);
-        }
+    function handleToogleClose(event){
+        setOpen(false);
     }
 
     let selectClass = "unselected-list-card";
@@ -111,101 +102,65 @@ function ListCard(props) {
 
     let cardElement = 
     <div> 
-        <ListItem 
+       <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
             sx={{p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1}}
             className = {"playlist-card"}
             button
             onClick={(event) => {
-                handleLoadList(event, idNamePair._id)
-            }}
+                handleLoadList(event, idNamePair._id)}} 
+            onDoubleClick = {(event) => {
+                handleToggleEdit(event)}}
+                aria-label='edit'         
         >
-
-            <Box sx={{ p: 1, flexGrow: 1, transform:"translate(0%, -30%)" }} >{idNamePair.name}</Box>
-            <Box sx={{ p: 1, flexGrow: 1, textAlign: "start", fontSize: "18px" }}
-            >by:</Box>
-
-            <Box sx={{ p: 1, transform:"translate(-20%, -30%)" }}>
+            <Box sx={{ p: 1, flexGrow: 1, fontSize: "18px", textAlign: "left" }}>{idNamePair.name} 
+            <Box> by: {auth.user.firstName} {auth.user.lastName}</Box>
+            <Box> published: </Box></Box>
+            <Box sx={{ p: 1, fontSize: "14pt" }}>
                 <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                    <ThumbUpAltOutlinedIcon style={{fontSize:'24pt'}} />
+                <ThumbUpAltOutlinedIcon style={{fontSize:'14pt'}} />
                 </IconButton>
+                10
             </Box>
-            <Box sx={{ p: 1, transform:"translate(-20%, -30%)" }}>
+            <Box sx={{ p: 1, fontSize: "14pt" }}>
                 <IconButton onClick={(event) => {
                         handleDeleteList(event, idNamePair._id)
                     }} aria-label='delete'>
-                    <ThumbDownOffAltOutlinedIcon style={{fontSize:'24pt'}} />
+                    <ThumbDownOffAltOutlinedIcon style={{fontSize:'14pt'}}/>
                 </IconButton>
+                10
             </Box>
 
-
-             <Box
+            <Box
             sx={{ p: 1, transform:"translate(0%, 40%)" }}>
-                <IconButton button onClick={(event) => {
-                    handleArrowIcon(event, idNamePair._id)
+                <IconButton onClick={(event) => {
+                    handleToogleopen(event);
+                    handleLoadList(event, idNamePair._id)
                 }}>
                 {open? <KeyboardDoubleArrowUpOutlinedIcon/>: <KeyboardDoubleArrowDownOutlinedIcon/>}
                 </IconButton>
             </Box>
 
-            
-
         </ListItem>
-
-        <Collapse in = {open} timeout = "auto" unmountOnExit>
+        <Collapse in = {open} unmountOnExit>
             <div class = "expanded">
-                <div class = "expanded-grid" >
+            <div class = "expanded-grid" >
                 <WorkspaceScreen/>   
-                </div>  
-
-                <Box
-                 sx= {{ bgcolor: "#d6c4d8", height: "10%", borderRadius: "25px",  width: "95%", transform: "translate(2.5%, 0%)"}}
-                 >
-                    <IconButton 
-                    sx = {{p: 1, transform: "translate(650%, 0%)"}} 
-                    onClick={(event) => {
-                        handleAddNewSong()
-                    }}
-                    ><AddIcon/></IconButton>
+                </div> 
+                <Box sx = {{transform:"translate(5%, 98%)"}}>
+                <Button 
+                disabled={!store.canClose()}
+                id='close-button'
+                onClick={handleDeleteList}
+                variant="contained">
+                    Detete
+                </Button>
                 </Box>
-                <Box sx = {{transform: "translate(2.5%, 70%)"}}>
-                <input
-                disabled={!store.canUndo()}
-                type = "button"
-                id = "edit-toolBar-button"
-                value="Undo"
-                onClick={handleUndo}/>
-
-                <input
-                disabled={!store.canRedo()}
-                type = "button"
-                id = "edit-toolBar-button"
-                value="Redo"
-                onClick={handleRedo} />
-                </Box>
-
-                <Box sx = {{transform: "translate(55%, -30%)"}}>
-                <input
-                type = "button"
-                id = "edit-toolBar-button"
-                value="Publish" />
-
-                <input
-                type = "button"
-                id = "edit-toolBar-button"
-                value="Delete" 
-                onClick={handleDeleteList(idNamePair._id)}/>
-
-                <input
-                type = "button"
-                id = "edit-toolBar-button"
-                value="Duplicate" />
-                </Box>       
-            
+                <EditToolbar/>
             </div>
-        </Collapse>
-        
+
+        </Collapse>      
         </div>
 
     if (editActive) {
