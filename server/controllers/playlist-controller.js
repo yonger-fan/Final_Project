@@ -1,6 +1,5 @@
 const Playlist = require('../models/playlist-model')
 const User = require('../models/user-model');
-const auth = require('../auth')
 /*
     This is our back-end API. It provides all the data services
     our database needs. Note that this file contains the controller
@@ -9,20 +8,16 @@ const auth = require('../auth')
     @author McKilla Gorilla
 */
 createPlaylist = (req, res) => {
-    if(auth.verifyUser(req) === null){
-        return res.status(400).json({
-            errorMessage: 'UNAUTHORIZED'
-        })
-    }
     const body = req.body;
     console.log("createPlaylist body: " + JSON.stringify(body));
+
     if (!body) {
         return res.status(400).json({
             success: false,
             error: 'You must provide a Playlist',
         })
     }
-    
+
     const playlist = new Playlist(body);
     console.log("playlist: " + playlist.toString());
     if (!playlist) {
@@ -51,11 +46,6 @@ createPlaylist = (req, res) => {
     })
 }
 deletePlaylist = async (req, res) => {
-    if(auth.verifyUser(req) === null){
-        return res.status(400).json({
-            errorMessage: 'UNAUTHORIZED'
-        })
-    }
     console.log("delete Playlist with id: " + JSON.stringify(req.params.id));
     console.log("delete " + req.params.id);
     Playlist.findById({ _id: req.params.id }, (err, playlist) => {
@@ -67,14 +57,14 @@ deletePlaylist = async (req, res) => {
         }
 
         // DOES THIS LIST BELONG TO THIS USER?
-        async function asyncFindUser(list) {
-            User.findOne({ email: list.ownerEmail }, (err, user) => {
+        async function asyncFindUser(playlist) {
+            User.findOne({ email: playlist.ownerEmail }, (err, user) => {
                 console.log("user._id: " + user._id);
                 console.log("req.userId: " + req.userId);
                 if (user._id == req.userId) {
                     console.log("correct user!");
                     Playlist.findOneAndDelete({ _id: req.params.id }, () => {
-                        return res.status(200).json({});
+                        return res.status(200).json({success: true});
                     }).catch(err => console.log(err))
                 }
                 else {
@@ -88,12 +78,8 @@ deletePlaylist = async (req, res) => {
         asyncFindUser(playlist);
     })
 }
+
 getPlaylistById = async (req, res) => {
-    if(auth.verifyUser(req) === null){
-        return res.status(400).json({
-            errorMessage: 'UNAUTHORIZED'
-        })
-    }
     console.log("Find Playlist with id: " + JSON.stringify(req.params.id));
 
     await Playlist.findById({ _id: req.params.id }, (err, list) => {
@@ -121,11 +107,6 @@ getPlaylistById = async (req, res) => {
     }).catch(err => console.log(err))
 }
 getPlaylistPairs = async (req, res) => {
-    if(auth.verifyUser(req) === null){
-        return res.status(400).json({
-            errorMessage: 'UNAUTHORIZED'
-        })
-    }
     console.log("getPlaylistPairs");
     await User.findOne({ _id: req.userId }, (err, user) => {
         console.log("find user with id " + req.userId);
@@ -162,11 +143,6 @@ getPlaylistPairs = async (req, res) => {
     }).catch(err => console.log(err))
 }
 getPlaylists = async (req, res) => {
-    if(auth.verifyUser(req) === null){
-        return res.status(400).json({
-            errorMessage: 'UNAUTHORIZED'
-        })
-    }
     await Playlist.find({}, (err, playlists) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -180,11 +156,6 @@ getPlaylists = async (req, res) => {
     }).catch(err => console.log(err))
 }
 updatePlaylist = async (req, res) => {
-    if(auth.verifyUser(req) === null){
-        return res.status(400).json({
-            errorMessage: 'UNAUTHORIZED'
-        })
-    }
     const body = req.body
     console.log("updatePlaylist: " + JSON.stringify(body));
     console.log("req.body.name: " + req.body.name);

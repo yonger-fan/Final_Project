@@ -33,10 +33,6 @@ export default function AppBanner() {
         auth.logoutUser();
     }
 
-    const handleHouseClick = () => {
-        store.closeCurrentList();
-    }
-
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
         <Menu
@@ -83,8 +79,9 @@ export default function AppBanner() {
         menu = loggedInMenu;
         if (store.currentList) {
             editToolbar = <EditToolbar />;
-        }
+        } 
     }
+
     
     function getAccountMenu(loggedIn) {
         let userInitials = auth.getUserInitials();
@@ -96,7 +93,7 @@ export default function AppBanner() {
     }
 
     return (
-        <Box sx={{flexGrow: 1}}>
+        <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
                 <Toolbar>
                     <Typography                        
@@ -105,9 +102,10 @@ export default function AppBanner() {
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' } }}                        
                     >
-                        <Link onClick={handleHouseClick} style={{ textDecoration: 'none', color: 'white' }} to='/'>Playlister</Link>
+                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
                     </Typography>
-                    <Box sx={{ height: "90px", display: { xs: 'none', md: 'flex' } }}>
+                    
+                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
                             size="large"
                             edge="end"
@@ -116,6 +114,7 @@ export default function AppBanner() {
                             aria-haspopup="true"
                             onClick={handleProfileMenuOpen}
                             color="inherit"
+                            disabled = {store.isEditListName2()}
                         >
                             { getAccountMenu(auth.loggedIn) }
                         </IconButton>

@@ -23,11 +23,11 @@ function WorkspaceScreen() {
     else if (store.isRemoveSongModalOpen()) {
         modalJSX = <MUIRemoveSongModal />;
     }
-
     return (
         <Box>
         <List 
             id="playlist-cards" 
+            sx={{ width: '100%', bgcolor: 'background.paper' }}
         >
             {
                 store.currentList.songs.map((song, index) => (

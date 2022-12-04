@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import AuthContext from '../auth'
-import MUIErrorModal from './MUIErrorModal'
 import Copyright from './Copyright'
 
 import Avatar from '@mui/material/Avatar';
@@ -13,9 +12,15 @@ import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import MUIRegisterErrorModal from './MUIRegisterErrorModal';
 
 export default function RegisterScreen() {
     const { auth } = useContext(AuthContext);
+
+    let modalJSX = "";
+    if (auth.isRegisterModalOpen()) {
+        modalJSX = <MUIRegisterErrorModal />;
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -28,13 +33,6 @@ export default function RegisterScreen() {
             formData.get('passwordVerify')
         );
     };
-
-    let modalJSX = ""
-    console.log(auth);
-    if (auth.errorMessage !== null){
-        modalJSX = <MUIErrorModal />;
-    }
-    console.log(modalJSX);
 
     return (
             <Container component="main" maxWidth="xs">

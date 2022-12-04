@@ -16,8 +16,6 @@ import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 import AuthContext from '../auth';
 import EditToolbar from './EditToolbar';
-import YouTubePlayerExample from './player';
-
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -30,11 +28,12 @@ function ListCard(props) {
     const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [open, setOpen] = useState(false);
+    const [close, setClose] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
 
     function handleClose() {
-        store.closeCurrentList();
+        if (close == true) {store.closeCurrentList();}
     }
 
     function handleLoadList(event, id) {
@@ -48,7 +47,6 @@ function ListCard(props) {
 
             // CHANGE THE CURRENT LIST
             store.setCurrentList(id);
-        
         }
     }
 
@@ -69,7 +67,7 @@ function ListCard(props) {
         event.stopPropagation();
         let _id = event.target.id;
         _id = ("" + _id).substring("delete-list-".length);
-        store.markListForDeletion(id);
+        store.markListForDeletion(idNamePair._id);
     }
 
     function handleKeyPress(event) {
@@ -88,7 +86,7 @@ function ListCard(props) {
     }
 
     function handleToogleClose(event){
-        setOpen(false);
+        setClose(true);
     }
 
     let selectClass = "unselected-list-card";
@@ -99,8 +97,7 @@ function ListCard(props) {
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
-
-    let cardElement = 
+    let cardElement =
     <div> 
        <ListItem
             id={idNamePair._id}
@@ -136,9 +133,12 @@ function ListCard(props) {
             sx={{ p: 1, transform:"translate(0%, 40%)" }}>
                 <IconButton onClick={(event) => {
                     handleToogleopen(event);
-                    handleLoadList(event, idNamePair._id)
                 }}>
-                {open? <KeyboardDoubleArrowUpOutlinedIcon/>: <KeyboardDoubleArrowDownOutlinedIcon/>}
+                {open? <KeyboardDoubleArrowUpOutlinedIcon onClick = {() => {
+                    handleToogleClose();
+                }}
+                />: <KeyboardDoubleArrowDownOutlinedIcon onClick = {(event) => {
+                    handleLoadList(event, idNamePair._id)}}/>}
                 </IconButton>
             </Box>
 
@@ -152,16 +152,17 @@ function ListCard(props) {
                 <Button 
                 disabled={!store.canClose()}
                 id='close-button'
-                onClick={handleDeleteList}
+                onClick = {(event) => {{handleDeleteList(event, idNamePair._id)}}}
                 variant="contained">
                     Detete
                 </Button>
                 </Box>
-                <EditToolbar/>
+                <Box sx = {{transform:"translate(-6.4%, 0%)"}}><EditToolbar/></Box>
             </div>
 
-        </Collapse>      
+        </Collapse>     
         </div>
+
 
     if (editActive) {
         cardElement =

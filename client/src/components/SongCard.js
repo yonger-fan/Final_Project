@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
-import Button from '@mui/material/Button';
 
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
@@ -40,7 +39,6 @@ function SongCard(props) {
     function handleClick(event) {
         // DOUBLE CLICK IS FOR SONG EDITING
         if (event.detail === 2) {
-            console.log("double clicked");
             store.showEditSongModal(index, song);
         }
     }
@@ -66,14 +64,13 @@ function SongCard(props) {
                 href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
                 {song.title} by {song.artist}
             </a>
-            <Button
-                sx={{transform:"translate(-5%, -5%)", width:"5px", height:"30px", bgcolor: "transparent"}}
-                variant="contained"
+            <input
+                type="button"
                 id={"remove-song-" + index}
                 className="list-card-button"
-                onClick={handleRemoveSong}>{"\u2715"}</Button>
-
-                
+                value={"\u2715"}
+                onClick={handleRemoveSong}
+            />
         </div>
     );
 }

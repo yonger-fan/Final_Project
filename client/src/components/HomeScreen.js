@@ -13,16 +13,15 @@ import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 import SortOutlinedIcon from '@mui/icons-material/SortOutlined'
 import Typography from '@mui/material/Typography';
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
 import YouTubePlayerExample from './player';
-/*
-    This React component lists all the top5 lists in the UI.
-    
-    @author McKilla Gorilla
-*/
+import CommentPlace from './comment';
+import { IconButton } from '@mui/material';
+
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [isplayer, setIsPlayer] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
 
     useEffect(() => {
@@ -32,9 +31,12 @@ const HomeScreen = () => {
     function handleCreateNewList() {
         store.createNewList();
     }
+    function handleComment() {
+        setIsPlayer(true);
+    }
 
     function handlePlayer() {
-        store.createNewList();
+        setIsPlayer(false);
     }
 
     const handleProfileMenuOpen = (event) => {
@@ -113,7 +115,7 @@ const HomeScreen = () => {
         <Box sx={{transform:"translate(50%, -60%)"}} >
         <input type="text" placeholder="Search.." ></input>
         </Box>
-            <Box sx={{bgcolor:"background.paper"}} id="list-selector-list">
+            <Box sx={{bgcolor:"background.paper"}} id="list-selector-list" overflow={"scroll"}>
                 {
                     listCard
                 }
@@ -136,19 +138,9 @@ const HomeScreen = () => {
             </Box>
         </div>
 
-        <input
-                type = "button"
-                id = "player-button"
-                onClick = {handlePlayer}
-                value="player" />
-
-        <input
-                type = "button"
-                id = "player-button"
-                onClick = {handleCreateNewList}
-                value="comment" />
-
-                <YouTubePlayerExample/>
+        <IconButton onClick = {(event) => {handlePlayer()}}>player</IconButton>
+        <IconButton onClick = {(event) => {handleComment()}}>comment</IconButton>
+        {isplayer? <CommentPlace/>: <YouTubePlayerExample/>}
 
         
         </div>
