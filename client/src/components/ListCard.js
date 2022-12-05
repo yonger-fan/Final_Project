@@ -29,10 +29,18 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [open, setOpen] = useState(false);
     const [text, setText] = useState("");
-    const { idNamePair, selected, publish, publishDate } = props;
+    const { idNamePair, selected, publish, publishDate,likes, disLikes } = props;
 
     function handleClose() {
         store.closeCurrentList();
+    }
+
+    function handleLikes(event, id) {
+        store.editLikes(id);
+    }
+
+    function handleDisLikes(event, id){
+        store.editDisLikes(id);
     }
 
     function handlePublish(event) {
@@ -108,7 +116,7 @@ function ListCard(props) {
             key={idNamePair._id}
             sx={{p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1}}
             className = {"playlist-card"}
-            button
+            
             onClick={(event) => {
                 handleLoadList(event, idNamePair._id)}} 
             onDoubleClick = {(event) => {
@@ -118,20 +126,31 @@ function ListCard(props) {
             <Box sx={{ p: 1, flexGrow: 1, fontSize: "18px", textAlign: "left" }}>{idNamePair.name} 
             <Box> by: {auth.user.firstName} {auth.user.lastName}</Box>
             <Box> {publish? <Box>published: {publishDate}</Box> : null}</Box></Box>
-            <Box sx={{ p: 1, fontSize: "14pt" }}>
-                <IconButton onClick={handleToggleEdit} aria-label='edit'>
+            {publish? <Box sx={{ p: 1, fontSize: "14pt" }}>
+                <IconButton onClick={(event) => handleLikes(event, idNamePair._id)}>
                 <ThumbUpAltOutlinedIcon style={{fontSize:'14pt'}} />
                 </IconButton>
-                10
-            </Box>
-            <Box sx={{ p: 1, fontSize: "14pt" }}>
+                {likes}
+            </Box> :  <Box sx={{ p: 1, fontSize: "14pt" }}>
+                <IconButton>
+                <ThumbUpAltOutlinedIcon style={{fontSize:'14pt'}} />
+                </IconButton>
+                {likes}
+            </Box>}
+            {publish? <Box sx={{ p: 1, fontSize: "14pt" }}>
                 <IconButton onClick={(event) => {
-                        handleDeleteList(event, idNamePair._id)
-                    }} aria-label='delete'>
+                        handleDisLikes(event, idNamePair._id)
+                    }} >
                     <ThumbDownOffAltOutlinedIcon style={{fontSize:'14pt'}}/>
                 </IconButton>
-                10
-            </Box>
+                {disLikes}
+            </Box>: <Box sx={{ p: 1, fontSize: "14pt" }}>
+                <IconButton>
+                    <ThumbDownOffAltOutlinedIcon style={{fontSize:'14pt'}}/>
+                </IconButton>
+                {disLikes}
+            </Box>}
+            
             <Box
             sx={{ p: 1, transform:"translate(0%, 40%)" }}>
                 <IconButton >

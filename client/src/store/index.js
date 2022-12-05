@@ -31,7 +31,9 @@ export const GlobalStoreActionType = {
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
     HIDE_MODALS: "HIDE_MODALS",
-    PUBLISH_DATE: "PUBLISH_DATE"
+    PUBLISH_DATE: "PUBLISH_DATE",
+    EDIT_DISLIKES: "EDIT_DISLIKES",
+    EDIT_LIKES: "EDIT_LIKES",
     
 }
 
@@ -96,6 +98,36 @@ function GlobalStoreContextProvider(props) {
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
                     currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    
+                });
+            }
+
+            case GlobalStoreActionType.EDIT_LIKES: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: payload.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    
+                });
+            }
+
+            case GlobalStoreActionType.EDIT_DISLIKES: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: payload.idNamePairs,
+                    currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -306,6 +338,74 @@ function GlobalStoreContextProvider(props) {
                                 let pairsArray = response.data.idNamePairs;
                                 storeReducer({
                                     type: GlobalStoreActionType.PUBLISH_DATE,
+                                    payload: {
+                                        idNamePairs: pairsArray,
+                                    }
+                                });
+                            }
+                        }
+                        getListPairs(playlist);
+                    }
+                }
+                updateList(playlist);
+            }
+        }
+        asyncSetDate(id);
+    }
+
+    store.editLikes = function (id) {
+        // GET THE LIST
+        async function asyncSetDate(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                 let num = playlist.likes + 1;
+                 let dNum = playlist.disLikes;
+                 playlist.likes = num;
+                 playlist.disLikes = dNum
+                async function updateList(playlist) {
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        async function getListPairs(playlist) {
+                            response = await api.getPlaylistPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.EDIT_LIKES,
+                                    payload: {
+                                        idNamePairs: pairsArray,
+                                    }
+                                });
+                            }
+                        }
+                        getListPairs(playlist);
+                    }
+                }
+                updateList(playlist);
+            }
+        }
+        asyncSetDate(id);
+    }
+
+    store.editDisLikes = function (id) {
+        // GET THE LIST
+        async function asyncSetDate(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                 let num = playlist.disLikes + 1;
+                 let dNum = playlist.likes;
+                 playlist.disLikes = num;
+                 playlist.likes = dNum;
+                async function updateList(playlist) {
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        async function getListPairs(playlist) {
+                            response = await api.getPlaylistPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.EDIT_DISLIKES,
                                     payload: {
                                         idNamePairs: pairsArray,
                                     }

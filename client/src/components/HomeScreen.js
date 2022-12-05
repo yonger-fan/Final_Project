@@ -72,6 +72,8 @@ const HomeScreen = () => {
                         selected={false}
                         publish = {pair.publish}
                         publishDate = {pair.publishDate}
+                        likes = {pair.likes}
+                        disLikes = {pair.disLikes}
                     />
                 ))
                 
