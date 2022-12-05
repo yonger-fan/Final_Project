@@ -28,13 +28,13 @@ function ListCard(props) {
     const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [open, setOpen] = useState(false);
-    const [close, setClose] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
 
     function handleClose() {
-        if (close == true) {store.closeCurrentList();}
+        store.closeCurrentList();
     }
+
 
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
@@ -82,12 +82,10 @@ function ListCard(props) {
     }
 
     function handleToogleopen(event){
-        if (store.currentList != null){setOpen(!open);}
+       // if (store.currentList != null){setOpen(!open);}
+       setOpen(!open);
     }
 
-    function handleToogleClose(event){
-        setClose(true);
-    }
 
     let selectClass = "unselected-list-card";
     if (selected) {
@@ -128,27 +126,21 @@ function ListCard(props) {
                 </IconButton>
                 10
             </Box>
-
             <Box
             sx={{ p: 1, transform:"translate(0%, 40%)" }}>
-                <IconButton onClick={(event) => {
+                <IconButton >
+                {open? null: <KeyboardDoubleArrowDownOutlinedIcon onClick = {(event) => {
                     handleToogleopen(event);
-                }}>
-                {open? <KeyboardDoubleArrowUpOutlinedIcon onClick = {() => {
-                    handleToogleClose();
-                }}
-                />: <KeyboardDoubleArrowDownOutlinedIcon onClick = {(event) => {
                     handleLoadList(event, idNamePair._id)}}/>}
                 </IconButton>
             </Box>
-
         </ListItem>
         <Collapse in = {open} unmountOnExit>
             <div class = "expanded">
             <div class = "expanded-grid" >
-                <WorkspaceScreen/>   
+                {store.currentList? <WorkspaceScreen/>: null}   
                 </div> 
-                <Box sx = {{transform:"translate(5%, 98%)"}}>
+                <Box sx = {{transform:"translate(1.4%, 98%)"}}>
                 <Button 
                 disabled={!store.canClose()}
                 id='close-button'
@@ -157,7 +149,14 @@ function ListCard(props) {
                     Detete
                 </Button>
                 </Box>
-                <Box sx = {{transform:"translate(-6.4%, 0%)"}}><EditToolbar/></Box>
+                <Box sx = {{transform:"translate(-10%, 0%)"}}><EditToolbar/></Box>    
+                <Box
+            sx={{ p: 1, transform:"translate(90%, 20%)" }}>
+                <IconButton onClick={(event) => {
+                    handleToogleopen(event);
+                    handleClose()
+                }}><KeyboardDoubleArrowUpOutlinedIcon/></IconButton>
+                </Box>
             </div>
 
         </Collapse>     

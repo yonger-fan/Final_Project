@@ -17,10 +17,10 @@ import Button from '@mui/material/Button';
 import YouTubePlayerExample from './player';
 import CommentPlace from './comment';
 import AllListsScreen from './AllListsScreen';
-import UserScreen from './UseScreen';
+import HomeScreen from './HomeScreen';
 import { IconButton } from '@mui/material';
 
-const HomeScreen = () => {
+export default function UserScreen() {
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const [isplayer, setIsPlayer] = useState(false);
@@ -31,21 +31,22 @@ const HomeScreen = () => {
         store.loadIdNamePairs();
     }, []);
 
-    function handleCreateNewList() {
-        store.createNewList();
-    }
-
     function handleComment() {
         setIsPlayer(true);
+    }
+
+    function handleCreateNewList() {
+        store.createNewList();
     }
 
     function handleAllLists() {
         setIsAllList(true);
     }
 
-    function handleUsers() {
+    function handleHomeScreen() {
         setIsAllList(false);
     }
+
 
     function handlePlayer() {
         setIsPlayer(false);
@@ -105,11 +106,11 @@ const HomeScreen = () => {
 
     return (
     <div>
-        
+        {isAllList? <AllListsScreen/>:<HomeScreen/>}
         <div id = "leftHome-layout">
         <Button sx={{transform:"translate(10%, 30%)"}}
                 color="primary" 
-                onClick={handleCreateNewList}
+                onClick={handleHomeScreen}
             >
                 <HomeOutlinedIcon />
         </Button>
@@ -121,7 +122,7 @@ const HomeScreen = () => {
         </Button>
         <Button sx={{transform:"translate(10%, 30%)"}}
                 color="primary" 
-                onClick={handleUsers}
+                
             >
                 <PersonOutlineOutlinedIcon />
         </Button>
@@ -129,10 +130,7 @@ const HomeScreen = () => {
         <input type="text" placeholder="Search.." ></input>
         </Box>
             <Box sx={{bgcolor:"background.paper"}} id="list-selector-list" overflow={"scroll"}>
-                {
-                    listCard
-                }
-                <MUIDeleteModal />
+                
             </Box>
         </div>
         <div id = "rightHome-layout">
@@ -168,5 +166,3 @@ const HomeScreen = () => {
     </div>
         )
 }
-
-export default HomeScreen;

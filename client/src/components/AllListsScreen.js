@@ -16,36 +16,37 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import YouTubePlayerExample from './player';
 import CommentPlace from './comment';
-import AllListsScreen from './AllListsScreen';
 import UserScreen from './UseScreen';
+import HomeScreen from './HomeScreen';
 import { IconButton } from '@mui/material';
 
-const HomeScreen = () => {
+export default function AllListsScreen() {
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const [isplayer, setIsPlayer] = useState(false);
-    const [isAllList, setIsAllList] = useState(false);
+    const [isUsers, setIsUsers] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
 
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
 
-    function handleCreateNewList() {
-        store.createNewList();
-    }
-
     function handleComment() {
         setIsPlayer(true);
     }
 
-    function handleAllLists() {
-        setIsAllList(true);
+    function handleUsers() {
+        setIsUsers(true);
     }
 
-    function handleUsers() {
-        setIsAllList(false);
+    function handleHomeScreen() {
+        setIsUsers(false);
     }
+
+    function handleCreateNewList() {
+        store.createNewList();
+    }
+
 
     function handlePlayer() {
         setIsPlayer(false);
@@ -105,23 +106,23 @@ const HomeScreen = () => {
 
     return (
     <div>
-        
+        {isUsers? <UserScreen/>:<HomeScreen/>}
         <div id = "leftHome-layout">
         <Button sx={{transform:"translate(10%, 30%)"}}
                 color="primary" 
-                onClick={handleCreateNewList}
+                onClick={handleHomeScreen}
             >
                 <HomeOutlinedIcon />
         </Button>
         <Button sx={{transform:"translate(10%, 30%)"}}
                 color="primary" 
-                onClick={handleAllLists}
             >
                 <GroupsOutlinedIcon />
         </Button>
         <Button sx={{transform:"translate(10%, 30%)"}}
                 color="primary" 
                 onClick={handleUsers}
+                
             >
                 <PersonOutlineOutlinedIcon />
         </Button>
@@ -129,10 +130,7 @@ const HomeScreen = () => {
         <input type="text" placeholder="Search.." ></input>
         </Box>
             <Box sx={{bgcolor:"background.paper"}} id="list-selector-list" overflow={"scroll"}>
-                {
-                    listCard
-                }
-                <MUIDeleteModal />
+                
             </Box>
         </div>
         <div id = "rightHome-layout">
@@ -168,5 +166,3 @@ const HomeScreen = () => {
     </div>
         )
 }
-
-export default HomeScreen;

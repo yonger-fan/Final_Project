@@ -5,12 +5,15 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import SlowMotionVideoSharpIcon from '@mui/icons-material/SlowMotionVideoSharp';
 import Button from '@mui/material/Button';
 import { useContext } from 'react';
+import { useState } from 'react';
 import AuthContext from '../auth'
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
+
 
 
 export default function SplashScreen() {
     const { auth } = useContext(AuthContext);
+
     const history = useHistory();
 
     const handleLogin = (event) => {
