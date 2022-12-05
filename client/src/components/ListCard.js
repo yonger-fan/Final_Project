@@ -29,10 +29,15 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [open, setOpen] = useState(false);
     const [text, setText] = useState("");
-    const { idNamePair, selected } = props;
+    const { idNamePair, selected, publish, publishDate } = props;
 
     function handleClose() {
         store.closeCurrentList();
+    }
+
+    function handlePublish(event) {
+        store.setPublishDate(idNamePair._id);
+        console.log("publish date " + publishDate);
     }
 
 
@@ -95,8 +100,9 @@ function ListCard(props) {
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
+
     let cardElement =
-    <div> 
+    <div>
        <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
@@ -111,7 +117,7 @@ function ListCard(props) {
         >
             <Box sx={{ p: 1, flexGrow: 1, fontSize: "18px", textAlign: "left" }}>{idNamePair.name} 
             <Box> by: {auth.user.firstName} {auth.user.lastName}</Box>
-            <Box> published: </Box></Box>
+            <Box> {publish? <Box>published: {publishDate}</Box> : null}</Box></Box>
             <Box sx={{ p: 1, fontSize: "14pt" }}>
                 <IconButton onClick={handleToggleEdit} aria-label='edit'>
                 <ThumbUpAltOutlinedIcon style={{fontSize:'14pt'}} />
@@ -135,6 +141,31 @@ function ListCard(props) {
                 </IconButton>
             </Box>
         </ListItem>
+        {publish? 
+        <Collapse in = {open} unmountOnExit>
+        <div class = "expanded">
+        <div class = "expanded-grid">
+        {store.currentList? <WorkspaceScreen/>: null}   
+                </div> 
+                <Box sx = {{transform:"translate(1.4%, 98%)"}}>
+                <Button 
+                disabled={!store.canClose()}
+                id='close-button'
+                onClick = {(event) => {{handleDeleteList(event, idNamePair._id)}}}
+                variant="contained">
+                    Duplicate
+                </Button>
+                </Box>
+                </div>
+                <Box
+            sx={{ p: 1, transform:"translate(90%, 20%)" }}>
+                <IconButton onClick={(event) => {
+                    handleToogleopen(event);
+                    handleClose()
+                }}><KeyboardDoubleArrowUpOutlinedIcon/></IconButton>
+                </Box>
+        </Collapse>
+        : 
         <Collapse in = {open} unmountOnExit>
             <div class = "expanded">
             <div class = "expanded-grid" >
@@ -148,8 +179,18 @@ function ListCard(props) {
                 variant="contained">
                     Detete
                 </Button>
+                <Button 
+                disabled={!store.canClose()}
+                id='close-button'
+                onClick={(event) => {
+                    handlePublish(event);
+                    handleToogleopen(event);
+                }}
+                variant="contained">
+                    Publish
+                </Button>
                 </Box>
-                <Box sx = {{transform:"translate(-10%, 0%)"}}><EditToolbar/></Box>    
+                <Box sx = {{transform:"translate(-6.6%, 0%)"}}><EditToolbar/></Box>    
                 <Box
             sx={{ p: 1, transform:"translate(90%, 20%)" }}>
                 <IconButton onClick={(event) => {
@@ -159,7 +200,8 @@ function ListCard(props) {
                 </Box>
             </div>
 
-        </Collapse>     
+        </Collapse>  
+        }   
         </div>
 
 

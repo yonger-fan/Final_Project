@@ -55,14 +55,6 @@ function EditToolbar() {
                 id='close-button'
                 onClick={handleClose}
                 variant="contained">
-                    Publish
-            </Button>
-
-            <Button 
-                disabled={!store.canClose()}
-                id='close-button'
-                onClick={handleClose}
-                variant="contained">
                    Duplicate
             </Button>
         </div>

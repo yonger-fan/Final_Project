@@ -30,8 +30,9 @@ export default function YouTubePlayerExample() {
         }
 
         for(let i = 0 ; i < size ; i++){
-            playlist[i] = 
-            store.currentList.songs[i].youTubeId;
+            playlist[i] = store.currentList.songs[i].youTubeId;
+            name[i] = store.currentList.songs[i].title;
+            art[i] = store.currentList.songs[i].artist;
         }
 
 

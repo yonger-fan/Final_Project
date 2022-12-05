@@ -70,6 +70,8 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        publish = {pair.publish}
+                        publishDate = {pair.publishDate}
                     />
                 ))
                 
