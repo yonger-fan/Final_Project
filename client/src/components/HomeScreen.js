@@ -46,10 +46,6 @@ const HomeScreen = () => {
         history.push("/userscreen/");
     }
 
-    function handleUsers() {
-        setIsAllList(false);
-    }
-
     function handlePlayer() {
         setIsPlayer(false);
     }

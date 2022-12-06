@@ -16,6 +16,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 import AuthContext from '../auth';
 import EditToolbar from './EditToolbar';
+import SongspaceScreen from './SongSpaceScreen';
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -164,7 +165,7 @@ function ListCard(props) {
         <Collapse in = {open} unmountOnExit>
         <div class = "expanded">
         <div class = "expanded-grid">
-        {store.currentList? <WorkspaceScreen/>: null}   
+        {store.currentList? <SongspaceScreen/>: null}   
                 </div> 
                 <Box sx = {{transform:"translate(1.4%, 98%)"}}>
                 <Button 

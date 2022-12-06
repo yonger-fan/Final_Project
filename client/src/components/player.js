@@ -14,6 +14,7 @@ export default function YouTubePlayerExample() {
     const playlistName = "";
     const title = "";
     const artist = "";
+    let player;
     // THIS EXAMPLE DEMONSTRATES HOW TO DYNAMICALLY MAKE A
     // YOUTUBE PLAYER AND EMBED IT IN YOUR SITE. IT ALSO
     // DEMONSTRATES HOW TO IMPLEMENT A PLAYLIST THAT MOVES
@@ -64,9 +65,36 @@ export default function YouTubePlayerExample() {
         currentSong = currentSong % playlist.length;
     }
 
+    function decSong() {
+        currentSong--;
+        currentSong = currentSong % playlist.length;
+    }
+
+    function handlePlay(event){
+        player.playVideo();
+        
+    }
+
+    function handleStop(event){
+        player.stopVideo();
+    }
+
+    function handlePlayPrevious(event){
+        decSong();
+        loadAndPlayCurrentSong(player);
+
+    }
+
+    function handlePlayNext(event){
+        incSong();
+        loadAndPlayCurrentSong(player);
+        
+    }
+
     function onPlayerReady(event) {
         loadAndPlayCurrentSong(event.target);
         event.target.playVideo();
+        player = event.target;
     }
 
     // THIS IS OUR EVENT HANDLER FOR WHEN THE YOUTUBE PLAYER'S STATE
@@ -116,10 +144,10 @@ export default function YouTubePlayerExample() {
             Artist: {artist}
             <br></br>
             <Box sx= {{bgcolor: "darkgray", borderRadius: "25px", width : "35%", transform: "translate(100%, 0%)"}}>
-            <IconButton><FastRewindIcon/></IconButton>
-            <IconButton><StopIcon/></IconButton>
-            <IconButton><PlayArrowIcon/></IconButton>
-            <IconButton><FastForwardIcon/></IconButton>
+            <IconButton onClick={(event) => {handlePlayPrevious(event)}}><FastRewindIcon/></IconButton>
+            <IconButton onClick={(event) =>{handleStop(event)}}><StopIcon/></IconButton>
+            <IconButton onClick={(event) => {handlePlay(event)}}><PlayArrowIcon/></IconButton>
+            <IconButton onClick={(event) => {handlePlayNext(event)}}><FastForwardIcon/></IconButton>
             </Box>
         </div>
 

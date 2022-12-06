@@ -34,6 +34,7 @@ export const GlobalStoreActionType = {
     PUBLISH_DATE: "PUBLISH_DATE",
     EDIT_DISLIKES: "EDIT_DISLIKES",
     EDIT_LIKES: "EDIT_LIKES",
+    GET_ALL_LISTS: "GET_ALL_LISTS"
     
 }
 
@@ -63,6 +64,7 @@ function GlobalStoreContextProvider(props) {
         listMarkedForDeletion: null,
         isEdition: false,
         isDeleting: false,
+        allLists: [],
     });
     const history = useHistory();
 
@@ -164,6 +166,22 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
+                    
+                })
+            }
+
+            case GlobalStoreActionType.GET_ALL_LISTS: {                
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: payload.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter + 1,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    allLists: payload.allLists
                     
                 })
             }
@@ -317,6 +335,28 @@ function GlobalStoreContextProvider(props) {
         }
         asyncChangeListName(id);
     }
+
+
+
+    store.getAllLists = function () {
+        // GET THE LIST
+        async function toGetLists() {
+            let response = await api.getAllTheLists();
+            if (response.data.success) {
+                let playlists = response.data.playlists;
+                
+                storeReducer({
+                    type: GlobalStoreActionType.GET_ALL_LISTS,
+                    payload: {
+                        allLists: playlists
+                    }
+                });
+            }
+        }
+        toGetLists(); 
+    }
+
+
 
 
     store.setPublishDate = function (id) {

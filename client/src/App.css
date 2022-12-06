@@ -263,6 +263,19 @@ top: 10%;
   border-radius: 25px;
 }
 
+.cardClass2 {
+  font-size: 18pt;
+  padding: 15px;
+}
+
+.card-size {
+  top:10%;
+  height:80%;
+  width: 100%;
+  background-color: rgb(209, 221, 210);
+  overflow: scroll;
+}
+
 .list-card:aria-disabled,
 .list-card[aria-disabled] {
   border: 1px solid #999999;
