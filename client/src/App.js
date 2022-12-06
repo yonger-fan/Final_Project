@@ -5,12 +5,16 @@ import { AuthContextProvider } from './auth';
 import { GlobalStoreContextProvider } from './store'
 import {
     AppBanner,
+    HomeScreen,
     HomeWrapper,
     LoginScreen,
     RegisterScreen,
     Statusbar,
     WorkspaceScreen
 } from './components'
+import AllListsScreen from './components/AllListsScreen';
+import UserScreen from './components/UseScreen';
+import UsersScreen from './components/UseScreen';
 /*
     This is our application's top-level component.
     
@@ -34,6 +38,9 @@ const App = () => {
                         <Route path="/login/" exact component={LoginScreen} />
                         <Route path="/register/" exact component={RegisterScreen} />
                         <Route path="/playlist/:id" exact component={WorkspaceScreen} />
+                        <Route path="/screen/" exact component={AllListsScreen} />
+                        <Route path="/homescreen/" exact component={HomeScreen} />
+                        <Route path="/userscreen/" exact component={UsersScreen} />
                     </Switch>
                     <Statusbar />
                 </GlobalStoreContextProvider>

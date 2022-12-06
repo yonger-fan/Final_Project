@@ -4,18 +4,16 @@ import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import AddIcon from '@mui/icons-material/Add';
-import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
 import Box from '@mui/material/Box'
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 import SortOutlinedIcon from '@mui/icons-material/SortOutlined'
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import YouTubePlayerExample from './player';
 import CommentPlace from './comment';
+import { useHistory } from 'react-router-dom';
 import AllListsScreen from './AllListsScreen';
 import UserScreen from './UseScreen';
 import { IconButton } from '@mui/material';
@@ -26,6 +24,7 @@ const HomeScreen = () => {
     const [isplayer, setIsPlayer] = useState(false);
     const [isAllList, setIsAllList] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
+    const history = useHistory();
 
     useEffect(() => {
         store.loadIdNamePairs();
@@ -40,7 +39,11 @@ const HomeScreen = () => {
     }
 
     function handleAllLists() {
-        setIsAllList(true);
+        history.push("/screen/");
+    }
+
+    function handleUsers() {
+        history.push("/userscreen/");
     }
 
     function handleUsers() {
@@ -109,7 +112,6 @@ const HomeScreen = () => {
 
     return (
     <div>
-        
         <div id = "leftHome-layout">
         <Button sx={{transform:"translate(10%, 30%)"}}
                 color="primary" 

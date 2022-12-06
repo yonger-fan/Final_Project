@@ -1,56 +1,31 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth';
 import ListCard from './ListCard.js'
-import MUIDeleteModal from './MUIDeleteModal'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import AddIcon from '@mui/icons-material/Add';
-import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
 import Box from '@mui/material/Box'
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 import SortOutlinedIcon from '@mui/icons-material/SortOutlined'
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import YouTubePlayerExample from './player';
 import CommentPlace from './comment';
-import AllListsScreen from './AllListsScreen';
-import HomeScreen from './HomeScreen';
 import { IconButton } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 
-export default function UserScreen() {
+
+
+export default function UsersScreen() {
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const [isplayer, setIsPlayer] = useState(false);
-    const [isAllList, setIsAllList] = useState(false);
+    const [isUsers, setIsUsers] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
-
-    useEffect(() => {
-        store.loadIdNamePairs();
-    }, []);
-
-    function handleComment() {
-        setIsPlayer(true);
-    }
-
-    function handleCreateNewList() {
-        store.createNewList();
-    }
-
-    function handleAllLists() {
-        setIsAllList(true);
-    }
-
-    function handleHomeScreen() {
-        setIsAllList(false);
-    }
-
-
-    function handlePlayer() {
-        setIsPlayer(false);
-    }
+    const history = useHistory();
+    const { auth } = useContext(AuthContext);
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -59,25 +34,24 @@ export default function UserScreen() {
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
-    const menuId = 'primary-search-account-menu';
 
-    let listCard = "";
-    if (store) {
-        listCard = 
-            <List sx={{width: '100%', bgcolor: 'background.paper', mb:"20px" }}>
-            {
-                store.idNamePairs.map((pair) => (
-                    <ListCard
-                        key={pair._id}
-                        idNamePair={pair}
-                        selected={false}
-                    />
-                ))
-                
-            }
-            
-            </List>;
+    function handleComment() {
+        setIsPlayer(true);
     }
+
+    function handleHomeScreen() {
+        history.push("/homescreen/");
+    }
+
+    function handleAllLists() {
+        history.push("/screen/");
+    }
+
+    function handlePlayer() {
+        setIsPlayer(false);
+    }
+
+    const menuId = 'primary-search-account-menu';
 
     const sortByMenu = (
         <Menu
@@ -104,13 +78,17 @@ export default function UserScreen() {
     )
     let menu = sortByMenu;
 
+    
+    
+
     return (
-    <div>
-        {isAllList? <AllListsScreen/>:<HomeScreen/>}
+        <div>
         <div id = "leftHome-layout">
         <Button sx={{transform:"translate(10%, 30%)"}}
                 color="primary" 
-                onClick={handleHomeScreen}
+                disabled={!auth.loggedIn}
+                onClick = {handleHomeScreen}
+                
             >
                 <HomeOutlinedIcon />
         </Button>
@@ -129,10 +107,8 @@ export default function UserScreen() {
         <Box sx={{transform:"translate(50%, -60%)"}} >
         <input type="text" placeholder="Search.." ></input>
         </Box>
-            <Box sx={{bgcolor:"background.paper"}} id="list-selector-list" overflow={"scroll"}>
-                
-            </Box>
         </div>
+
         <div id = "rightHome-layout">
         <div class = "splashScreen-buttom">
 
@@ -156,12 +132,7 @@ export default function UserScreen() {
         
         </div>
         <div id = "add-list-position">
-            <input
-                type = "button"
-                id = "add-list"
-                onClick = {handleCreateNewList}
-                value="+" />
-            Your Lists
+            Users Screen
         </div>
     </div>
         )

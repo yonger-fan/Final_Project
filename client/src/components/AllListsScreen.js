@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 import Menu from '@mui/material/Menu';
@@ -19,38 +20,16 @@ import CommentPlace from './comment';
 import UserScreen from './UseScreen';
 import HomeScreen from './HomeScreen';
 import { IconButton } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 
 export default function AllListsScreen() {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const [isplayer, setIsPlayer] = useState(false);
     const [isUsers, setIsUsers] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
-
-    useEffect(() => {
-        store.loadIdNamePairs();
-    }, []);
-
-    function handleComment() {
-        setIsPlayer(true);
-    }
-
-    function handleUsers() {
-        setIsUsers(true);
-    }
-
-    function handleHomeScreen() {
-        setIsUsers(false);
-    }
-
-    function handleCreateNewList() {
-        store.createNewList();
-    }
-
-
-    function handlePlayer() {
-        setIsPlayer(false);
-    }
+    const history = useHistory();
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -59,25 +38,24 @@ export default function AllListsScreen() {
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
-    const menuId = 'primary-search-account-menu';
 
-    let listCard = "";
-    if (store) {
-        listCard = 
-            <List sx={{width: '100%', bgcolor: 'background.paper', mb:"20px" }}>
-            {
-                store.idNamePairs.map((pair) => (
-                    <ListCard
-                        key={pair._id}
-                        idNamePair={pair}
-                        selected={false}
-                    />
-                ))
-                
-            }
-            
-            </List>;
+    function handleComment() {
+        setIsPlayer(true);
     }
+
+    function handleHomeScreen() {
+        history.push("/homescreen/");
+    }
+
+    function handleUsers() {
+        history.push("/userscreen/");
+    }
+
+    function handlePlayer() {
+        setIsPlayer(false);
+    }
+
+    const menuId = 'primary-search-account-menu';
 
     const sortByMenu = (
         <Menu
@@ -104,13 +82,16 @@ export default function AllListsScreen() {
     )
     let menu = sortByMenu;
 
+    
+    
+
     return (
-    <div>
-        {isUsers? <UserScreen/>:<HomeScreen/>}
+        <div>
         <div id = "leftHome-layout">
         <Button sx={{transform:"translate(10%, 30%)"}}
+                disabled={!auth.loggedIn}
                 color="primary" 
-                onClick={handleHomeScreen}
+                onClick = {handleHomeScreen}
             >
                 <HomeOutlinedIcon />
         </Button>
@@ -122,17 +103,14 @@ export default function AllListsScreen() {
         <Button sx={{transform:"translate(10%, 30%)"}}
                 color="primary" 
                 onClick={handleUsers}
-                
             >
                 <PersonOutlineOutlinedIcon />
         </Button>
         <Box sx={{transform:"translate(50%, -60%)"}} >
         <input type="text" placeholder="Search.." ></input>
         </Box>
-            <Box sx={{bgcolor:"background.paper"}} id="list-selector-list" overflow={"scroll"}>
-                
-            </Box>
         </div>
+
         <div id = "rightHome-layout">
         <div class = "splashScreen-buttom">
 
@@ -156,12 +134,7 @@ export default function AllListsScreen() {
         
         </div>
         <div id = "add-list-position">
-            <input
-                type = "button"
-                id = "add-list"
-                onClick = {handleCreateNewList}
-                value="+" />
-            Your Lists
+            All List Screen
         </div>
     </div>
         )

@@ -21,6 +21,11 @@ export default function SplashScreen() {
 
     };
 
+    const handleGuest = (event) => {
+        history.push("/screen/");
+    }
+
+
     const handleCreate = (event) => {
         history.push("/register/");
 
@@ -73,7 +78,7 @@ export default function SplashScreen() {
                 type="submit"
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                //onClick={handleGuest}
+                onClick={handleGuest}
                 >
                     Continue as Guest
             </Button>
