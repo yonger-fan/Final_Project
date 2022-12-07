@@ -14,15 +14,13 @@ import Button from '@mui/material/Button';
 import YouTubePlayerExample from './player';
 import CommentPlace from './comment';
 import { useHistory } from 'react-router-dom';
-import AllListsScreen from './AllListsScreen';
-import UserScreen from './UseScreen';
 import { IconButton } from '@mui/material';
+
 
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const [isplayer, setIsPlayer] = useState(false);
-    const [isAllList, setIsAllList] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
     const history = useHistory();
 
@@ -80,6 +78,7 @@ const HomeScreen = () => {
             
             </List>;
     }
+
 
     const sortByMenu = (
         <Menu

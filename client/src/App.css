@@ -254,6 +254,17 @@ top: 10%;
   overflow: scroll;
 }
 
+#comment-selector-list {
+  position: absolute;
+  left: 0%;
+  top: 25%;
+  width: 100%;
+  height: 100;
+  flex-direction: column;
+  overflow: scroll;
+  background-color: #636723;
+}
+
 .list-card,
 .selected-list-card,
 .unselected-list-card {
@@ -305,22 +316,19 @@ top: 10%;
   height:fit-content;
   border-radius: 20px;
   width: 100%;
-  text-align: center;
+  margin-top:1px ;
   overflow: scroll;
+  padding:40px;
 }
 
 .place-comment-card {
-  background-color: burlywood;
-  top: 10%;
   height:78%;
   overflow: scroll;
 }
 
-.comment {
-  top : 10%;
+.comment {  
   height: 100%;
 }
-
 .list-card-button {
   float: right;
   transform: scale(2);

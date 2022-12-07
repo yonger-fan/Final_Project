@@ -11,9 +11,10 @@ import { Box } from '@mui/material';
 
 export default function YouTubePlayerExample() {
     const { store } = useContext(GlobalStoreContext);
-    const playlistName = "";
-    const title = "";
+    const [number, setNumber] = useState(0);
+    const songTitle = "";
     const artist = "";
+    const playlistName = "";
     let player;
     // THIS EXAMPLE DEMONSTRATES HOW TO DYNAMICALLY MAKE A
     // YOUTUBE PLAYER AND EMBED IT IN YOUR SITE. IT ALSO
@@ -52,7 +53,8 @@ export default function YouTubePlayerExample() {
     // THIS FUNCTION LOADS THE CURRENT SONG INTO
     // THE PLAYER AND PLAYS IT
     function loadAndPlayCurrentSong(player) {
-        let song = playlist[currentSong];
+        let song = playlist[number];
+
         console.log("song " + song);
         
         player.loadVideoById(song);
@@ -61,11 +63,22 @@ export default function YouTubePlayerExample() {
 
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
     function incSong() {
+        if (number+1 != playlist.length) {
+        setNumber((number+1)% playlist.length);
+        } else {
+            setNumber(0);
+        }
         currentSong++;
         currentSong = currentSong % playlist.length;
     }
 
     function decSong() {
+        if (number-1 < 0) {
+            setNumber(playlist.length% playlist.length);
+        
+        } else {
+            setNumber((number-1)% playlist.length);
+        }
         currentSong--;
         currentSong = currentSong % playlist.length;
     }
@@ -127,28 +140,54 @@ export default function YouTubePlayerExample() {
         }
     }
 
+    if(store.currentList!= null){
     return <div>
         <YouTube
-        videoId={playlist[currentSong]}
+        videoId={playlist[number]}
         opts={playerOptions}
         onReady={onPlayerReady}
         onStateChange={onPlayerStateChange} 
         />
-
-            Playlist: {playlistName}
+            Playlist: { store.currentList.name} 
             <br></br>
-            Song #: {currentSong}
+            Song #: {number+1}
             <br></br>
-            Title: {title}
+            Title: {store.currentList.songs[number].title}
             <br></br>
-            Artist: {artist}
+            Artist: {store.currentList.songs[number].artist}
             <br></br>
-            <Box sx= {{bgcolor: "darkgray", borderRadius: "25px", width : "35%", transform: "translate(100%, 0%)"}}>
+            <Box sx= {{bgcolor: "darkgray", borderRadius: "25px", width : "40%", transform: "translate(55%, 0%)"}}>
             <IconButton onClick={(event) => {handlePlayPrevious(event)}}><FastRewindIcon/></IconButton>
             <IconButton onClick={(event) =>{handleStop(event)}}><StopIcon/></IconButton>
             <IconButton onClick={(event) => {handlePlay(event)}}><PlayArrowIcon/></IconButton>
             <IconButton onClick={(event) => {handlePlayNext(event)}}><FastForwardIcon/></IconButton>
             </Box>
         </div>
+    } else {
+
+        return <div>
+        <YouTube
+        videoId={playlist[currentSong]}
+        opts={playerOptions}
+        onReady={onPlayerReady}
+        onStateChange={onPlayerStateChange} 
+        />
+            Playlist: {playlistName}
+            <br></br>
+            Song #: None
+            <br></br>
+            Title: {songTitle}
+            <br></br>
+            Artist: {artist}
+            <br></br>
+            <Box sx= {{bgcolor: "darkgray", borderRadius: "25px", width : "40%", transform: "translate(55%, 0%)"}}>
+            <IconButton onClick={(event) => {handlePlayPrevious(event)}}><FastRewindIcon/></IconButton>
+            <IconButton onClick={(event) =>{handleStop(event)}}><StopIcon/></IconButton>
+            <IconButton onClick={(event) => {handlePlay(event)}}><PlayArrowIcon/></IconButton>
+            <IconButton onClick={(event) => {handlePlayNext(event)}}><FastForwardIcon/></IconButton>
+            </Box>
+        </div>
+
+    }
 
 }

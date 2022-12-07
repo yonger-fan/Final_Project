@@ -1,43 +1,38 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
-import AuthContext from '../auth'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import AddIcon from '@mui/icons-material/Add';
-import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
 import Box from '@mui/material/Box'
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 import SortOutlinedIcon from '@mui/icons-material/SortOutlined'
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import YouTubePlayerExample from './player';
 import CommentPlace from './comment';
-import UserScreen from './UseScreen';
-import HomeScreen from './HomeScreen';
-import { IconButton } from '@mui/material';
 import { useHistory } from 'react-router-dom';
+import AllListCard from './allListCard';
+import { IconButton } from '@mui/material';
+import AuthContext from '../auth';
 
-export default function AllListsScreen() {
+const AllListsScreen = () => {
     const { store } = useContext(GlobalStoreContext);
-    const { auth } = useContext(AuthContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const [isplayer, setIsPlayer] = useState(false);
-    const [isUsers, setIsUsers] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
     const history = useHistory();
+    const { auth } = useContext(AuthContext);
 
-    const handleProfileMenuOpen = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+    useEffect(() => {
+        store.getAllLists();
+    }, []);
 
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-    };
+    function handleCreateNewList() {
+        store.createNewList();
+    }
 
     function handleComment() {
         setIsPlayer(true);
@@ -55,7 +50,36 @@ export default function AllListsScreen() {
         setIsPlayer(false);
     }
 
+    const handleProfileMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
     const menuId = 'primary-search-account-menu';
+
+    let listCard = "";
+    if (store) {
+        listCard = 
+            <List sx={{width: '100%', bgcolor: 'background.paper', mb:"20px" }}>
+            {
+              store.allListsPairs.map((pair) => (
+                    <AllListCard
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                        publish = {pair.publish}
+                        publishDate = {pair.publishDate}
+                        likes = {pair.likes}
+                        disLikes = {pair.disLikes}
+                    />
+                ))
+                
+            }
+            
+            </List>;
+    }
 
     const sortByMenu = (
         <Menu
@@ -82,21 +106,19 @@ export default function AllListsScreen() {
     )
     let menu = sortByMenu;
 
-    
-    
-
     return (
-        <div>
+    <div>
         <div id = "leftHome-layout">
         <Button sx={{transform:"translate(10%, 30%)"}}
-                disabled={!auth.loggedIn}
                 color="primary" 
-                onClick = {handleHomeScreen}
+                disabled={!auth.loggedIn}
+                onClick={handleHomeScreen}
             >
                 <HomeOutlinedIcon />
         </Button>
         <Button sx={{transform:"translate(10%, 30%)"}}
                 color="primary" 
+                
             >
                 <GroupsOutlinedIcon />
         </Button>
@@ -109,8 +131,13 @@ export default function AllListsScreen() {
         <Box sx={{transform:"translate(50%, -60%)"}} >
         <input type="text" placeholder="Search.." ></input>
         </Box>
+            <Box sx={{bgcolor:"background.paper"}} id="list-selector-list" overflow={"scroll"}>
+                {
+                    listCard
+                }
+                <MUIDeleteModal />
+            </Box>
         </div>
-
         <div id = "rightHome-layout">
         <div class = "splashScreen-buttom">
 
@@ -134,8 +161,15 @@ export default function AllListsScreen() {
         
         </div>
         <div id = "add-list-position">
-            All List Screen
+            <input
+                type = "button"
+                id = "add-list"
+                onClick = {handleCreateNewList}
+                value="+" />
+            All Lists Screen
         </div>
     </div>
         )
 }
+
+export default AllListsScreen;

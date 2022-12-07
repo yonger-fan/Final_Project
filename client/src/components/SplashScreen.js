@@ -6,6 +6,7 @@ import SlowMotionVideoSharpIcon from '@mui/icons-material/SlowMotionVideoSharp';
 import Button from '@mui/material/Button';
 import { useContext } from 'react';
 import { useState } from 'react';
+import { GlobalStoreContext } from '../store'
 import AuthContext from '../auth'
 import { useHistory } from 'react-router-dom';
 
@@ -13,6 +14,7 @@ import { useHistory } from 'react-router-dom';
 
 export default function SplashScreen() {
     const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
 
     const history = useHistory();
 

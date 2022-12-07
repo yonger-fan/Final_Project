@@ -34,7 +34,8 @@ export const GlobalStoreActionType = {
     PUBLISH_DATE: "PUBLISH_DATE",
     EDIT_DISLIKES: "EDIT_DISLIKES",
     EDIT_LIKES: "EDIT_LIKES",
-    GET_ALL_LISTS: "GET_ALL_LISTS"
+    GET_ALL_LISTS: "GET_ALL_LISTS",
+    ADD_COMMENTS: "ADD_COMMENTS"
     
 }
 
@@ -55,6 +56,7 @@ function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
         currentModal : CurrentModal.NONE,
         idNamePairs: [],
+        allListsPairs: [],
         currentList: null,
         currentSongIndex : -1,
         currentSong : null,
@@ -64,7 +66,6 @@ function GlobalStoreContextProvider(props) {
         listMarkedForDeletion: null,
         isEdition: false,
         isDeleting: false,
-        allLists: [],
     });
     const history = useHistory();
 
@@ -84,6 +85,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
+                    allListsPairs: store.allListsPairs,
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -99,7 +101,24 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
+                    allListsPairs: store.allListsPairs,
                     currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    
+                });
+            }
+
+            case GlobalStoreActionType.ADD_COMMENTS: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: payload.idNamePairs,
+                    allListsPairs: store.allListsPairs,
+                    currentList: payload.playlist,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -114,7 +133,8 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
-                    currentList: store.currentList,
+                    allListsPairs: store.allListsPairs,
+                    currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -129,7 +149,8 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
-                    currentList: store.currentList,
+                    allListsPairs: store.allListsPairs,
+                    currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -144,6 +165,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
+                    allListsPairs: store.allListsPairs,
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -159,6 +181,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
+                    allListsPairs: store.allListsPairs,
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -173,7 +196,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.GET_ALL_LISTS: {                
                 return setStore({
                     currentModal : CurrentModal.NONE,
-                    idNamePairs: payload.idNamePairs,
+                    idNamePairs: store.idNamePairs,
                     currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -181,7 +204,7 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    allLists: payload.allLists
+                    allListsPairs: payload.allListsPairs,
                     
                 })
             }
@@ -190,6 +213,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload,
+                    allListsPairs: store.allListsPairs,
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -205,6 +229,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.DELETE_LIST,
                     idNamePairs: store.idNamePairs,
+                    allListsPairs: store.allListsPairs,
                     currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -220,6 +245,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
+                    allListsPairs: store.allListsPairs,
                     currentList: payload,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -235,6 +261,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
+                    allListsPairs: store.allListsPairs,
                     currentList: payload,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -250,6 +277,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.EDIT_SONG,
                     idNamePairs: store.idNamePairs,
+                    allListsPairs: store.allListsPairs,
                     currentList: store.currentList,
                     currentSongIndex: payload.currentSongIndex,
                     currentSong: payload.currentSong,
@@ -265,6 +293,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.REMOVE_SONG,
                     idNamePairs: store.idNamePairs,
+                    allListsPairs: store.allListsPairs,
                     currentList: store.currentList,
                     currentSongIndex: payload.currentSongIndex,
                     currentSong: payload.currentSong,
@@ -280,6 +309,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
+                    allListsPairs: store.allListsPairs,
                     currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -336,6 +366,45 @@ function GlobalStoreContextProvider(props) {
         asyncChangeListName(id);
     }
 
+    store.addComments = function (id, text) {
+        // GET THE LIST
+        async function asyncChangeListName(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                let string = ""
+                string = auth.user.firstName + " " + auth.user.lastName;
+                let newComment = {
+                    comment : text,
+                    userName : string
+                }
+                playlist.commentObject.push(newComment);
+                
+                async function updateList(playlist) {
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        async function getListPairs(playlist) {
+                            response = await api.getPlaylistPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.ADD_COMMENTS,
+                                    payload: {
+                                        idNamePairs: pairsArray,
+                                        playlist: playlist
+                                    }
+                                });
+                            }
+                        }
+                        getListPairs(playlist);
+                    }
+                }
+                updateList(playlist);
+            }
+        }
+        asyncChangeListName(id);
+    }
+
 
 
     store.getAllLists = function () {
@@ -343,12 +412,12 @@ function GlobalStoreContextProvider(props) {
         async function toGetLists() {
             let response = await api.getAllTheLists();
             if (response.data.success) {
-                let playlists = response.data.playlists;
-                
+                let pairsArray = response.data.allListPairs;
+                console.log("list pairs" + pairsArray);
                 storeReducer({
                     type: GlobalStoreActionType.GET_ALL_LISTS,
                     payload: {
-                        allLists: playlists
+                        allListsPairs: pairsArray
                     }
                 });
             }

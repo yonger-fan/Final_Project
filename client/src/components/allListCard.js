@@ -17,7 +17,6 @@ import Button from '@mui/material/Button';
 import AuthContext from '../auth';
 import EditToolbar from './EditToolbar';
 import SongspaceScreen from './SongSpaceScreen';
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -25,7 +24,7 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
     
     @author McKilla Gorilla
 */
-function ListCard(props) {
+function AllListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
@@ -119,13 +118,14 @@ function ListCard(props) {
             sx={{p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1}}
             className = {"playlist-card"}
             
-            
+            onClick={(event) => {
+                handleLoadList(event, idNamePair._id)}} 
             onDoubleClick = {(event) => {
                 handleToggleEdit(event)}}
                 aria-label='edit'         
         >
             <Box sx={{ p: 1, flexGrow: 1, fontSize: "18px", textAlign: "left" }}>{idNamePair.name} 
-            <Box> by: {auth.user.firstName} {auth.user.lastName}</Box>
+            <Box> by: </Box>
             <Box> {publish? <Box>published: {publishDate}</Box> : null}</Box></Box>
             {publish? <Box sx={{ p: 1, fontSize: "14pt" }}>
                 <IconButton onClick={(event) => handleLikes(event, idNamePair._id)}>
@@ -151,8 +151,7 @@ function ListCard(props) {
                 </IconButton>
                 {disLikes}
             </Box>}
-            <Box sx = {{fontSize: "20pt"}}><IconButton onClick={(event) => {
-                handleLoadList(event, idNamePair._id)}} ><PlayCircleOutlineIcon/></IconButton></Box>
+            
             <Box
             sx={{ p: 1, transform:"translate(0%, 40%)" }}>
                 <IconButton >
@@ -250,4 +249,4 @@ function ListCard(props) {
     );
 }
 
-export default ListCard;
+export default AllListCard;
