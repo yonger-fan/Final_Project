@@ -21,6 +21,7 @@ const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const [isplayer, setIsPlayer] = useState(false);
+    
     const isMenuOpen = Boolean(anchorEl);
     const history = useHistory();
 
@@ -48,16 +49,21 @@ const HomeScreen = () => {
         setIsPlayer(false);
     }
 
+    function handleNameSorting () {
+        
+    }
+
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
+
 
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
     const menuId = 'primary-search-account-menu';
 
-    let listCard = "";
+    let listCard = ""
     if (store) {
         listCard = 
             <List sx={{width: '100%', bgcolor: 'background.paper', mb:"20px" }}>
@@ -71,6 +77,7 @@ const HomeScreen = () => {
                         publishDate = {pair.publishDate}
                         likes = {pair.likes}
                         disLikes = {pair.disLikes}
+                        listens = {pair.listens}
                     />
                 ))
                 
@@ -96,7 +103,7 @@ const HomeScreen = () => {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Name(A-Z)</MenuItem>
+            <MenuItem onClick={handleNameSorting}>Name(A-Z)</MenuItem>
             <MenuItem onClick={handleMenuClose}>Publish Date(Newest)</MenuItem>
             <MenuItem onClick={handleMenuClose}>Listens(High - Low)</MenuItem>
             <MenuItem onClick={handleMenuClose}>Likes(High - Low)</MenuItem>

@@ -15,6 +15,7 @@ import YouTubePlayerExample from './player';
 import CommentPlace from './comment';
 import { IconButton } from '@mui/material';
 import { useHistory } from 'react-router-dom';
+import UserCard from './UserCard';
 
 
 
@@ -26,6 +27,10 @@ export default function UsersScreen() {
     const isMenuOpen = Boolean(anchorEl);
     const history = useHistory();
     const { auth } = useContext(AuthContext);
+
+    useEffect(() => {
+        store.loadIdNamePairs();
+    }, []);
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -52,6 +57,30 @@ export default function UsersScreen() {
     }
 
     const menuId = 'primary-search-account-menu';
+
+    let listCard = " ";
+    if (store) {
+        listCard = 
+            <List sx={{width: '100%', bgcolor: 'background.paper', mb:"20px" }}>
+            {
+              store.idNamePairs.filter(pair => pair.publish).map((pair) => (
+                    <UserCard
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                        publish = {pair.publish}
+                        publishDate = {pair.publishDate}
+                        likes = {pair.likes}
+                        disLikes = {pair.disLikes}
+                        listens={pair.listens}
+                        commentObject = {pair.commentObject}
+                    />
+                ))
+                
+            }
+            
+            </List>;
+    }
 
     const sortByMenu = (
         <Menu
@@ -107,6 +136,12 @@ export default function UsersScreen() {
         <Box sx={{transform:"translate(50%, -60%)"}} >
         <input type="text" placeholder="Search.." ></input>
         </Box>
+        <Box sx={{bgcolor:"background.paper"}} id="list-selector-list" overflow={"scroll"}>
+                {
+                    listCard
+                }
+                
+            </Box>
         </div>
 
         <div id = "rightHome-layout">
@@ -125,6 +160,7 @@ export default function UsersScreen() {
             </Box>
         </div>
 
+
         <IconButton onClick = {(event) => {handlePlayer()}}>player</IconButton>
         <IconButton onClick = {(event) => {handleComment()}}>comment</IconButton>
         {isplayer? <CommentPlace/>: <YouTubePlayerExample/>}
@@ -132,8 +168,8 @@ export default function UsersScreen() {
         
         </div>
         <div id = "add-list-position">
-            Users Screen
+            User Screen
         </div>
     </div>
-        )
+    )
 }

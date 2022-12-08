@@ -24,6 +24,7 @@ export default function SplashScreen() {
     };
 
     const handleGuest = (event) => {
+        store.getAllLists();
         history.push("/screen/");
     }
 

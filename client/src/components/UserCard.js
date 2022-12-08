@@ -25,13 +25,13 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
     
     @author McKilla Gorilla
 */
-function ListCard(props) {
+function UserCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [open, setOpen] = useState(false);
     const [text, setText] = useState("");
-    const { idNamePair, selected, publish, publishDate,likes, disLikes, listens } = props;
+    const { idNamePair, selected, publish, publishDate,likes, disLikes, commentObject, listens } = props;
 
     function handleClose() {
         store.closeCurrentList();
@@ -50,9 +50,17 @@ function ListCard(props) {
         console.log("publish date " + publishDate);
     }
 
-    function handleDuplicate(event) {
-        store.createDuplicateList()
+    function handlePlayList(event, id) {
+        if (!event.target.disabled) {
+            let _id = event.target.id;
+            if (_id.indexOf('list-card-text-') >= 0)
+                _id = ("" + _id).substring("list-card-text-".length);
 
+            console.log("load " + event.target.id);
+
+            // CHANGE THE CURRENT LIST
+            store.PlayTheLists(id);
+        }
     }
 
 
@@ -67,19 +75,6 @@ function ListCard(props) {
 
             // CHANGE THE CURRENT LIST
             store.setCurrentList(id);
-        }
-    }
-
-    function handlePlayList(event, id) {
-        if (!event.target.disabled) {
-            let _id = event.target.id;
-            if (_id.indexOf('list-card-text-') >= 0)
-                _id = ("" + _id).substring("list-card-text-".length);
-
-            console.log("load " + event.target.id);
-
-            // CHANGE THE CURRENT LIST
-            store.PlayTheLists(id);
         }
     }
 
@@ -137,38 +132,27 @@ function ListCard(props) {
             sx={{p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1}}
             className = {"playlist-card"}
             
-            
+            onClick={(event) => {
+                handleLoadList(event, idNamePair._id)}} 
             onDoubleClick = {(event) => {
                 handleToggleEdit(event)}}
                 aria-label='edit'         
         >
             <Box sx={{ p: 1, flexGrow: 1, fontSize: "18px", textAlign: "left" }}>{idNamePair.name} 
-            <Box> by: {auth.user.firstName} {auth.user.lastName}</Box>
+            <Box> by: {commentObject.userName} </Box>
             <Box> {publish? <Box>published: {publishDate}</Box> : null}</Box></Box>
-            {publish? <Box sx={{ p: 1, fontSize: "14pt" }}>
-                <IconButton onClick={(event) => handleLikes(event, idNamePair._id)}>
+            <IconButton onClick={(event) => handleLikes(event, idNamePair._id)}>
                 <ThumbUpAltOutlinedIcon style={{fontSize:'14pt'}} />
                 </IconButton>
                 {likes}
-            </Box> :  <Box sx={{ p: 1, fontSize: "14pt" }}>
-                <IconButton>
-                <ThumbUpAltOutlinedIcon style={{fontSize:'14pt'}} />
-                </IconButton>
-                {likes}
-            </Box>}
-            {publish? <Box sx={{ p: 1, fontSize: "14pt" }}>
+            <Box sx={{ p: 1, fontSize: "14pt" }}>
                 <IconButton onClick={(event) => {
                         handleDisLikes(event, idNamePair._id)
                     }} >
                     <ThumbDownOffAltOutlinedIcon style={{fontSize:'14pt'}}/>
                 </IconButton>
                 {disLikes}
-            </Box>: <Box sx={{ p: 1, fontSize: "14pt" }}>
-                <IconButton>
-                    <ThumbDownOffAltOutlinedIcon style={{fontSize:'14pt'}}/>
-                </IconButton>
-                {disLikes}
-            </Box>}
+            </Box>
             <Box>Listens: {listens} </Box>
             <Box sx = {{fontSize: "20pt"}}><IconButton onClick={(event) => {
                 handlePlayList(event, idNamePair._id)}} ><PlayCircleOutlineIcon/></IconButton></Box>
@@ -191,7 +175,7 @@ function ListCard(props) {
                 <Button 
                 disabled={!store.canClose()}
                 id='close-button'
-                onClick = {(event) => {{handleDuplicate(event)}}}
+                onClick = {(event) => {{handleDeleteList(event, idNamePair._id)}}}
                 variant="contained">
                     Duplicate
                 </Button>
@@ -269,4 +253,4 @@ function ListCard(props) {
     );
 }
 
-export default ListCard;
+export default UserCard;

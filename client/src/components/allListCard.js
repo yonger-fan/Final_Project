@@ -17,6 +17,7 @@ import Button from '@mui/material/Button';
 import AuthContext from '../auth';
 import EditToolbar from './EditToolbar';
 import SongspaceScreen from './SongSpaceScreen';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -30,7 +31,7 @@ function AllListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [open, setOpen] = useState(false);
     const [text, setText] = useState("");
-    const { idNamePair, selected, publish, publishDate,likes, disLikes } = props;
+    const { idNamePair, selected, publish, publishDate,likes, disLikes,commentObject, listens } = props;
 
     function handleClose() {
         store.closeCurrentList();
@@ -47,6 +48,19 @@ function AllListCard(props) {
     function handlePublish(event) {
         store.setPublishDate(idNamePair._id);
         console.log("publish date " + publishDate);
+    }
+
+    function handlePlayList(event, id) {
+        if (!event.target.disabled) {
+            let _id = event.target.id;
+            if (_id.indexOf('list-card-text-') >= 0)
+                _id = ("" + _id).substring("list-card-text-".length);
+
+            console.log("load " + event.target.id);
+
+            // CHANGE THE CURRENT LIST
+            store.PlayTheLists(id);
+        }
     }
 
 
@@ -118,40 +132,29 @@ function AllListCard(props) {
             sx={{p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1}}
             className = {"playlist-card"}
             
-            onClick={(event) => {
-                handleLoadList(event, idNamePair._id)}} 
+            
             onDoubleClick = {(event) => {
                 handleToggleEdit(event)}}
                 aria-label='edit'         
         >
             <Box sx={{ p: 1, flexGrow: 1, fontSize: "18px", textAlign: "left" }}>{idNamePair.name} 
-            <Box> by: </Box>
+            <Box> by: {commentObject.userName} </Box>
             <Box> {publish? <Box>published: {publishDate}</Box> : null}</Box></Box>
-            {publish? <Box sx={{ p: 1, fontSize: "14pt" }}>
-                <IconButton onClick={(event) => handleLikes(event, idNamePair._id)}>
+            <IconButton onClick={(event) => handleLikes(event, idNamePair._id)}>
                 <ThumbUpAltOutlinedIcon style={{fontSize:'14pt'}} />
                 </IconButton>
                 {likes}
-            </Box> :  <Box sx={{ p: 1, fontSize: "14pt" }}>
-                <IconButton>
-                <ThumbUpAltOutlinedIcon style={{fontSize:'14pt'}} />
-                </IconButton>
-                {likes}
-            </Box>}
-            {publish? <Box sx={{ p: 1, fontSize: "14pt" }}>
+            <Box sx={{ p: 1, fontSize: "14pt" }}>
                 <IconButton onClick={(event) => {
                         handleDisLikes(event, idNamePair._id)
                     }} >
                     <ThumbDownOffAltOutlinedIcon style={{fontSize:'14pt'}}/>
                 </IconButton>
                 {disLikes}
-            </Box>: <Box sx={{ p: 1, fontSize: "14pt" }}>
-                <IconButton>
-                    <ThumbDownOffAltOutlinedIcon style={{fontSize:'14pt'}}/>
-                </IconButton>
-                {disLikes}
-            </Box>}
-            
+            </Box>
+            <Box>Listens: {listens} </Box>
+            <Box sx = {{fontSize: "20pt"}}><IconButton onClick={(event) => {
+                handlePlayList(event, idNamePair._id)}} ><PlayCircleOutlineIcon/></IconButton></Box>
             <Box
             sx={{ p: 1, transform:"translate(0%, 40%)" }}>
                 <IconButton >

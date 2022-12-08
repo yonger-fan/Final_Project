@@ -53,12 +53,14 @@ export default function YouTubePlayerExample() {
     // THIS FUNCTION LOADS THE CURRENT SONG INTO
     // THE PLAYER AND PLAYS IT
     function loadAndPlayCurrentSong(player) {
-        let song = playlist[number];
-
+        let song = " ";
+        if (playlist.length!= null) {
+        song = playlist[number];
         console.log("song " + song);
         
         player.loadVideoById(song);
         player.playVideo();
+        }
     }
 
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
@@ -140,7 +142,7 @@ export default function YouTubePlayerExample() {
         }
     }
 
-    if(store.currentList!= null){
+    if(store.currentList != null && store.currentList.songs.length != 0){
     return <div>
         <YouTube
         videoId={playlist[number]}
@@ -152,7 +154,7 @@ export default function YouTubePlayerExample() {
             <br></br>
             Song #: {number+1}
             <br></br>
-            Title: {store.currentList.songs[number].title}
+            Title: {store.currentList.songs[number].title} 
             <br></br>
             Artist: {store.currentList.songs[number].artist}
             <br></br>
