@@ -31,7 +31,8 @@ function UserCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [open, setOpen] = useState(false);
     const [text, setText] = useState("");
-    const { idNamePair, selected, publish, publishDate,likes, disLikes, commentObject, listens } = props;
+    
+    const { idNamePair, selected, publish, publishDate,likes, disLikes, listens} = props;
 
     function handleClose() {
         store.closeCurrentList();
@@ -139,7 +140,7 @@ function UserCard(props) {
                 aria-label='edit'         
         >
             <Box sx={{ p: 1, flexGrow: 1, fontSize: "18px", textAlign: "left" }}>{idNamePair.name} 
-            <Box> by: {commentObject.userName} </Box>
+            <Box> by: {} </Box>
             <Box> {publish? <Box>published: {publishDate}</Box> : null}</Box></Box>
             <IconButton onClick={(event) => handleLikes(event, idNamePair._id)}>
                 <ThumbUpAltOutlinedIcon style={{fontSize:'14pt'}} />

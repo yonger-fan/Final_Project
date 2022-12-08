@@ -22,6 +22,7 @@ const AllListsScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const [isplayer, setIsPlayer] = useState(false);
+    const [text, setSearchText] = useState("")
     const isMenuOpen = Boolean(anchorEl);
     const history = useHistory();
     const { auth } = useContext(AuthContext);
@@ -50,6 +51,42 @@ const AllListsScreen = () => {
         setIsPlayer(false);
     }
 
+    function handleNameSorting() {
+        store.nameSorting();
+    }
+
+    function handlePublishSorting() {
+        store.sortPublishDate();
+    }
+
+    function handleEditDateSorting() {
+        store.nameSorting();
+    }
+
+    function handleCreationSorting (){
+        store.sortCreationDates();
+    }
+
+    function handlelikesSorting() {
+        store.sortLikes();
+    }
+
+    function handleDislikesSorting() {
+        store.sortDisLikes();
+    }
+
+    function handleListensSorting() {
+        store.sortListens();
+    }
+
+    function handleKeyPress(event) {
+        if (event.code === "Enter") {
+            let text = event.target.value;
+            setSearchText(text);
+            store.storeValue(text);
+        }
+    }
+
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -60,11 +97,14 @@ const AllListsScreen = () => {
     const menuId = 'primary-search-account-menu';
 
     let listCard = "";
+    console.log("createNewList response: " + store.searchUserText);
     if (store) {
         listCard =
             <List sx={{ width: '100%', bgcolor: 'background.paper', mb: "20px" }}>
                 {
-                    store.idNamePairs.filter(pair => pair.publish).map((pair) => (
+                    store.idNamePairs.filter(pair => pair.publish &&
+                        pair.name.toLowerCase().includes(store.searchUserText)).map((pair) => (
+                            
                         <AllListCard
                             key={pair._id}
                             idNamePair={pair}
@@ -74,7 +114,6 @@ const AllListsScreen = () => {
                             likes={pair.likes}
                             disLikes={pair.disLikes}
                             listens={pair.listens}
-                            commentObject = {pair.commentObject}
                         />
                     ))
 
@@ -99,11 +138,13 @@ const AllListsScreen = () => {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Name(A-Z)</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Publish Date(Newest)</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Listens(High - Low)</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Likes(High - Low)</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Dislikes(High - Low)</MenuItem>
+            <MenuItem onClick={handleNameSorting}>Name(A-Z)</MenuItem>
+            <MenuItem onClick={handlePublishSorting}>Publish Date(Newest)</MenuItem>
+            <MenuItem onClick={handleListensSorting}>Listens(High - Low)</MenuItem>
+            <MenuItem onClick={handlelikesSorting}>Likes(High - Low)</MenuItem>
+            <MenuItem onClick={handleDislikesSorting}>Dislikes(High - Low)</MenuItem>
+            <MenuItem onClick={handleEditDateSorting}>Edit Date(Old - New)</MenuItem>
+            <MenuItem onClick={handleCreationSorting}>Creation Date(Old - New)</MenuItem>
         </Menu>
     )
     let menu = sortByMenu;
@@ -131,7 +172,7 @@ const AllListsScreen = () => {
                     <PersonOutlineOutlinedIcon />
                 </Button>
                 <Box sx={{ transform: "translate(50%, -60%)" }} >
-                    <input type="text" placeholder="Search.." ></input>
+                    <input type="text" placeholder="Search.." onKeyPress={handleKeyPress}></input>
                 </Box>
                 <Box sx={{ bgcolor: "background.paper" }} id="list-selector-list" overflow={"scroll"}>
                     {
@@ -163,11 +204,6 @@ const AllListsScreen = () => {
 
             </div>
             <div id="add-list-position">
-                <input
-                    type="button"
-                    id="add-list"
-                    onClick={handleCreateNewList}
-                    value="+" />
                 All Lists Screen
             </div>
         </div>

@@ -37,7 +37,8 @@ export const GlobalStoreActionType = {
     GET_ALL_LISTS: "GET_ALL_LISTS",
     ADD_COMMENTS: "ADD_COMMENTS",
     DUPLICATE_NEW_LIST: "DUPLICATE_NEW_LIST",
-    PLAY_THE_LIST: "PLAY_THE_LIST"
+    PLAY_THE_LIST: "PLAY_THE_LIST",
+    GET_ALL_TEXT: "GET_ALL_TEXT"
     
 }
 
@@ -68,6 +69,7 @@ function GlobalStoreContextProvider(props) {
         listMarkedForDeletion: null,
         isEdition: false,
         isDeleting: false,
+        searchUserText: " "
     });
     const history = useHistory();
 
@@ -131,6 +133,8 @@ function GlobalStoreContextProvider(props) {
                 });
             }
 
+            
+
             case GlobalStoreActionType.ADD_COMMENTS: {
                 return setStore({
                     currentModal : CurrentModal.NONE,
@@ -159,6 +163,23 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
+                    
+                });
+            }
+
+            case GlobalStoreActionType.GET_ALL_TEXT: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    allListsPairs: store.allListsPairs,
+                    currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    searchUserText: payload.searchUserText
                     
                 });
             }
@@ -459,6 +480,135 @@ function GlobalStoreContextProvider(props) {
         toGetLists(); 
     }
 
+    store.storeValue = function (text) {
+                storeReducer({
+                    type: GlobalStoreActionType.GET_ALL_TEXT,
+                    payload: {
+                        searchUserText: text
+                    }
+                });
+    }
+
+    store.nameSorting = function () {
+        let listName = store.idNamePairs;
+        listName.sort((a,b) => {
+            if (a.name < b.name) {
+                return -1;
+            } 
+            if (a.name > b.name) {
+                return 1;
+            }
+            return 0;
+        });
+        storeReducer({
+            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+            payload: listName
+        });
+    }
+
+    store.sortLikes = function () {
+        let listLikes = store.idNamePairs;
+        listLikes.sort((a,b) => {
+            if (a.likes > b.likes) {
+                return -1;
+            } 
+            if (a.likes < b.likes) {
+                return 1;
+            }
+            return 0;
+        });
+        storeReducer({
+            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+            payload: listLikes
+        });
+    }
+
+    store.sortDisLikes = function () {
+        let lists = store.idNamePairs;
+        lists.sort((a,b) => {
+            if (a.disLikes > b.disLikes) {
+                return -1;
+            } 
+            if (a.disLikes < b.disLikes) {
+                return 1;
+            }
+            return 0;
+        });
+        storeReducer({
+            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+            payload: lists
+        });
+    }
+
+    store.sortPublishDate = function () {
+        let lists = store.idNamePairs;
+        lists.sort((a,b) => {
+            if (a.publishDate > b.publishDate) {
+                return -1;
+            } 
+            if (a.publishDate < b.publishDate) {
+                return 1;
+            }
+            return 0;
+        });
+        storeReducer({
+            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+            payload: lists
+        });
+    }
+
+    store.sortListens = function () {
+        let lists = store.idNamePairs;
+        lists.sort((a,b) => {
+            if (a.listens > b.listens) {
+                return -1;
+            } 
+            if (a.listens < b.listens) {
+                return 1;
+            }
+            return 0;
+        });
+        storeReducer({
+            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+            payload: lists
+        });
+    }
+
+    store.sortCreationDates = function () {
+        let lists = store.idNamePairs;
+        lists.sort((a,b) => {
+            if (a.createdAt < b.createdAt) {
+                return -1;
+            } 
+            if (a.createdAt > b.createdAt) {
+                return 1;
+            }
+            return 0;
+        });
+        storeReducer({
+            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+            payload: lists
+        });
+    }
+
+
+    store.sortEditDate = function () {
+        let lists = store.idNamePairs;
+        lists.sort((a,b) => {
+            if (a.updatedAt < b.updatedAt) {
+                return -1;
+            } 
+            if (a.updatedAt > b.updatedAt) {
+                return 1;
+            }
+            return 0;
+        });
+        storeReducer({
+            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+            payload: lists
+        });
+    }
+
 
 
 
@@ -581,7 +731,9 @@ function GlobalStoreContextProvider(props) {
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
         const counter = store.newListCounter + 1;
-        const response = await api.createPlaylist(newListName, [], auth.user.email, false, 0, 0);
+        let name = " ";
+        name = auth.user.firstName + " " + auth.user.lastName;
+        const response = await api.createPlaylist(newListName, [], auth.user.email, false, 0, 0, name);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();

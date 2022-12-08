@@ -37,6 +37,34 @@ const HomeScreen = () => {
         setIsPlayer(true);
     }
 
+    function handleNameSorting() {
+        store.nameSorting();
+    }
+
+    function handlePublishSorting() {
+        store.sortPublishDate();
+    }
+
+    function handleEditDateSorting() {
+        store.nameSorting();
+    }
+
+    function handleCreationSorting (){
+        store.sortCreationDates();
+    }
+
+    function handlelikesSorting() {
+        store.sortLikes();
+    }
+
+    function handleDislikesSorting() {
+        store.sortDisLikes();
+    }
+
+    function handleListensSorting() {
+        store.sortListens();
+    }
+
     function handleAllLists() {
         history.push("/screen/");
     }
@@ -47,10 +75,6 @@ const HomeScreen = () => {
 
     function handlePlayer() {
         setIsPlayer(false);
-    }
-
-    function handleNameSorting () {
-        
     }
 
     const handleProfileMenuOpen = (event) => {
@@ -104,10 +128,12 @@ const HomeScreen = () => {
             onClose={handleMenuClose}
         >
             <MenuItem onClick={handleNameSorting}>Name(A-Z)</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Publish Date(Newest)</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Listens(High - Low)</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Likes(High - Low)</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Dislikes(High - Low)</MenuItem>
+            <MenuItem onClick={handlePublishSorting}>Publish Date(Newest)</MenuItem>
+            <MenuItem onClick={handleListensSorting}>Listens(High - Low)</MenuItem>
+            <MenuItem onClick={handlelikesSorting}>Likes(High - Low)</MenuItem>
+            <MenuItem onClick={handleDislikesSorting}>Dislikes(High - Low)</MenuItem>
+            <MenuItem onClick={handleEditDateSorting}>Edit Date(Old - New)</MenuItem>
+            <MenuItem onClick={handleCreationSorting}>Creation Date(Old - New)</MenuItem>
         </Menu>
     )
     let menu = sortByMenu;

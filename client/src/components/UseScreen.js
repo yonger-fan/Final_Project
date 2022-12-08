@@ -24,6 +24,7 @@ export default function UsersScreen() {
     const [anchorEl, setAnchorEl] = useState(null);
     const [isplayer, setIsPlayer] = useState(false);
     const [isUsers, setIsUsers] = useState(false);
+    const [text, setSearchText] = useState("")
     const isMenuOpen = Boolean(anchorEl);
     const history = useHistory();
     const { auth } = useContext(AuthContext);
@@ -44,6 +45,34 @@ export default function UsersScreen() {
         setIsPlayer(true);
     }
 
+    function handleNameSorting() {
+        store.nameSorting();
+    }
+
+    function handlePublishSorting() {
+        store.sortPublishDate();
+    }
+
+    function handleEditDateSorting() {
+        store.nameSorting();
+    }
+
+    function handleCreationSorting (){
+        store.sortCreationDates();
+    }
+
+    function handlelikesSorting() {
+        store.sortLikes();
+    }
+
+    function handleDislikesSorting() {
+        store.sortDisLikes();
+    }
+
+    function handleListensSorting() {
+        store.sortListens();
+    }
+
     function handleHomeScreen() {
         history.push("/homescreen/");
     }
@@ -56,6 +85,14 @@ export default function UsersScreen() {
         setIsPlayer(false);
     }
 
+    function handleKeyPress(event) {
+        if (event.code === "Enter") {
+            let text = event.target.value;
+            setSearchText(text);
+            store.storeValue(text);
+        }
+    }
+
     const menuId = 'primary-search-account-menu';
 
     let listCard = " ";
@@ -63,7 +100,8 @@ export default function UsersScreen() {
         listCard = 
             <List sx={{width: '100%', bgcolor: 'background.paper', mb:"20px" }}>
             {
-              store.idNamePairs.filter(pair => pair.publish).map((pair) => (
+              store.idNamePairs.filter(pair => pair.publish &&
+                pair.name.toLowerCase().includes(store.searchUserText)).map((pair) => (
                     <UserCard
                         key={pair._id}
                         idNamePair={pair}
@@ -73,7 +111,7 @@ export default function UsersScreen() {
                         likes = {pair.likes}
                         disLikes = {pair.disLikes}
                         listens={pair.listens}
-                        commentObject = {pair.commentObject}
+                        
                     />
                 ))
                 
@@ -98,11 +136,13 @@ export default function UsersScreen() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Name(A-Z)</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Publish Date(Newest)</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Listens(High - Low)</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Likes(High - Low)</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Dislikes(High - Low)</MenuItem>
+            <MenuItem onClick={handleNameSorting}>Name(A-Z)</MenuItem>
+            <MenuItem onClick={handlePublishSorting}>Publish Date(Newest)</MenuItem>
+            <MenuItem onClick={handleListensSorting}>Listens(High - Low)</MenuItem>
+            <MenuItem onClick={handlelikesSorting}>Likes(High - Low)</MenuItem>
+            <MenuItem onClick={handleDislikesSorting}>Dislikes(High - Low)</MenuItem>
+            <MenuItem onClick={handleEditDateSorting}>Edit Date(Old - New)</MenuItem>
+            <MenuItem onClick={handleCreationSorting}>Creation Date(Old - New)</MenuItem>
         </Menu>
     )
     let menu = sortByMenu;
@@ -134,7 +174,7 @@ export default function UsersScreen() {
                 <PersonOutlineOutlinedIcon />
         </Button>
         <Box sx={{transform:"translate(50%, -60%)"}} >
-        <input type="text" placeholder="Search.." ></input>
+        <input type="text" placeholder="Search.." onKeyPress={handleKeyPress}></input>
         </Box>
         <Box sx={{bgcolor:"background.paper"}} id="list-selector-list" overflow={"scroll"}>
                 {
