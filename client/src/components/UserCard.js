@@ -32,7 +32,7 @@ function UserCard(props) {
     const [open, setOpen] = useState(false);
     const [text, setText] = useState("");
     
-    const { idNamePair, selected, publish, publishDate,likes, disLikes, listens} = props;
+    const { idNamePair, selected, publish, publishDate,likes, disLikes, listens, authorName} = props;
 
     function handleClose() {
         store.closeCurrentList();
@@ -140,7 +140,7 @@ function UserCard(props) {
                 aria-label='edit'         
         >
             <Box sx={{ p: 1, flexGrow: 1, fontSize: "18px", textAlign: "left" }}>{idNamePair.name} 
-            <Box> by: {} </Box>
+            <Box> by: {authorName} </Box>
             <Box> {publish? <Box>published: {publishDate}</Box> : null}</Box></Box>
             <IconButton onClick={(event) => handleLikes(event, idNamePair._id)}>
                 <ThumbUpAltOutlinedIcon style={{fontSize:'14pt'}} />

@@ -111,6 +111,7 @@ export default function UsersScreen() {
                         likes = {pair.likes}
                         disLikes = {pair.disLikes}
                         listens={pair.listens}
+                        authorName = {pair.authorName}
                         
                     />
                 ))

@@ -147,6 +147,7 @@ getPlaylistPairs = async (req, res) => {
                             disLikes: list.disLikes,
                             commentObject : list.commentObject,
                             listens: list.listens,
+                            authorName: list.authorName,
                             
                             
                         };
@@ -224,6 +225,7 @@ updatePlaylist = async (req, res) => {
                     list.disLikes = body.playlist.disLikes;
                     list.commentObject = body.playlist.commentObject;
                     list.listens = body.playlist.listens;
+                    list.authorName = list.authorName;
 
                     
                     list

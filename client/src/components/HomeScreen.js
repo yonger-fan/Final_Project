@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 import Menu from '@mui/material/Menu';
@@ -19,6 +20,7 @@ import { IconButton } from '@mui/material';
 
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const [isplayer, setIsPlayer] = useState(false);
     
@@ -87,12 +89,13 @@ const HomeScreen = () => {
     };
     const menuId = 'primary-search-account-menu';
 
-    let listCard = ""
+    let listCard = "";
+    let n = auth.user.firstName + " " + auth.user.lastName;
     if (store) {
         listCard = 
             <List sx={{width: '100%', bgcolor: 'background.paper', mb:"20px" }}>
             {
-                store.idNamePairs.map((pair) => (
+                store.idNamePairs.filter(pair => pair.authorName == n).map((pair) => (
                     <ListCard
                         key={pair._id}
                         idNamePair={pair}

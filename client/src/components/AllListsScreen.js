@@ -114,6 +114,7 @@ const AllListsScreen = () => {
                             likes={pair.likes}
                             disLikes={pair.disLikes}
                             listens={pair.listens}
+                            authorName = {pair.authorName}
                         />
                     ))
 
